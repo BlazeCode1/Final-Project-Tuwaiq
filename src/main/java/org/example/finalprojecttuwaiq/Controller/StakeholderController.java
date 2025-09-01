@@ -1,0 +1,48 @@
+package org.example.finalprojecttuwaiq.Controller;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.example.finalprojecttuwaiq.Api.ApiResponse;
+import org.example.finalprojecttuwaiq.Model.Stakeholder;
+import org.example.finalprojecttuwaiq.Service.StakeholderService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.example.finalprojecttuwaiq.DTO.StakeholderRequestDTO;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/stakeholders")
+@RequiredArgsConstructor
+public class StakeholderController {
+
+    private final StakeholderService stakeholderService;
+
+    @GetMapping("/get")
+    public ResponseEntity<List<Stakeholder>> getAllStakeholders() {
+        return ResponseEntity.ok(stakeholderService.getAllStakeholders());
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Stakeholder> getStakeholderById(@PathVariable Integer id) {
+        return ResponseEntity.ok(stakeholderService.getStakeholderById(id));
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<ApiResponse> addStakeholder(@Valid @RequestBody StakeholderRequestDTO stakeholderRequestDTO) {
+        stakeholderService.addStakeholder(stakeholderRequestDTO);
+        return ResponseEntity.status(201).body(new ApiResponse("Stakeholder added successfully"));
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ApiResponse> updateStakeholder(@PathVariable Integer id, @Valid @RequestBody StakeholderRequestDTO stakeholderRequestDTO) {
+        stakeholderService.updateStakeholder(id, stakeholderRequestDTO);
+        return ResponseEntity.ok(new ApiResponse("Stakeholder updated successfully"));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ApiResponse> deleteStakeholder(@PathVariable Integer id) {
+        stakeholderService.deleteStakeholder(id);
+        return ResponseEntity.ok(new ApiResponse("Stakeholder deleted successfully"));
+    }
+}
