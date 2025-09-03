@@ -31,7 +31,7 @@ public class BA {
     @NotEmpty(message = "Domain expertise cannot be blank")
     @Size(max = 255, message = "Domain expertise cannot exceed 255 characters")
     private String domainExpertise;
-
+    //TODO: isSubscribe boolean
     @OneToOne
     @MapsId
     @JsonIgnore
