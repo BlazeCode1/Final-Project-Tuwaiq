@@ -29,8 +29,7 @@ public class Project {
     @Size(max = 100, message = "Name cannot exceed 100 characters")
     private String name;
 
-    @NotEmpty(message = "Description cannot be blank")
-    @Size(max = 500, message = "Description cannot exceed 500 characters")
+    @Column(columnDefinition = "longtext")
     private String description;
 
     @Pattern(regexp = "^(Discovery|Analysis|Documentation|Validation|Design|InDelivery)$", message = "Status must be one of Discovery, Analysis, Documentation, Validation, Design, InDelivery")

@@ -15,7 +15,6 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Requirement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +22,7 @@ public class Requirement {
 
     @NotEmpty(message = "Title cannot be blank")
     @Size(max = 255, message = "Title cannot exceed 255 characters")
+    @Column(unique = true)
     private String title;
 
     @NotEmpty(message = "Description cannot be blank")
@@ -44,10 +44,9 @@ public class Requirement {
     @Size(max = 1000, message = "Rationale cannot exceed 1000 characters")
     private String rationale;
 
-    @Size(max = 255, message = "Trace ID cannot exceed 255 characters")
-    private String traceId;
 
     @ManyToOne
+    @JsonIgnore
     private Project project;
 
     @OneToMany(mappedBy = "requirement", cascade = CascadeType.ALL)

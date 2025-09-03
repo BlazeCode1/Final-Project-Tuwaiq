@@ -4,12 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiResponse;
 import org.example.finalprojecttuwaiq.DTO.RequirementRequestDTO;
-import org.example.finalprojecttuwaiq.Model.Requirement;
+import org.example.finalprojecttuwaiq.Service.DraftRequirementService;
 import org.example.finalprojecttuwaiq.Service.RequirementService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/requirement")
@@ -17,7 +15,7 @@ import java.util.List;
 public class RequirementController {
 
     private final RequirementService requirementService;
-
+    private final DraftRequirementService draftRequirementService;
     @GetMapping("/get")
     public ResponseEntity<?> getAllRequirements() {
         return ResponseEntity.ok(requirementService.getAllRequirements());
@@ -27,12 +25,36 @@ public class RequirementController {
     public ResponseEntity<?> getRequirementById(@PathVariable Integer id) {
         return ResponseEntity.ok(requirementService.getRequirementById(id));
     }
-
-    @PostMapping("/add")
-    public ResponseEntity<?> addRequirement(@Valid @RequestBody RequirementRequestDTO requirementRequestDTO) {
-        requirementService.addRequirement(requirementRequestDTO);
-        return ResponseEntity.status(201).body(new ApiResponse("Requirement added successfully"));
+    @GetMapping("/by-project/{project_id}")
+    public ResponseEntity<?> getRequirementsByProjectId(@PathVariable Integer project_id){
+        return ResponseEntity.ok(requirementService.getRequirementsByProjectId(project_id));
     }
+
+    @PostMapping("/generate/{project_id}")
+    public ResponseEntity<?> generateRequirements(@PathVariable Integer project_id) {
+        requirementService.extractRequirements(project_id);
+        return ResponseEntity.status(201).body("Requirements Generated and Drafted Successfully");
+    }
+
+    @GetMapping("/draft/project/{project_id}")
+    public ResponseEntity<?> getAllDraftRequirement(@PathVariable Integer project_id){
+        return ResponseEntity.ok(draftRequirementService.getDraftRequirementByProjectId(project_id));
+    }
+    @GetMapping("/draft/get/{draft_id}")
+    public ResponseEntity<?> getDraftById(@PathVariable Integer draft_id){
+        return ResponseEntity.ok(draftRequirementService.getDraftById(draft_id));
+    }
+    @PostMapping("/draft/accept/{draft_id}")
+    public ResponseEntity<?> acceptDraft(@PathVariable Integer draft_id){
+        requirementService.acceptDraft(draft_id);
+        return ResponseEntity.ok(new ApiResponse("Draft accepted!"));
+    }
+    @DeleteMapping("/draft/reject/{draft_id}")
+    public ResponseEntity<?> rejectDraft(@PathVariable Integer draft_id){
+        draftRequirementService.rejectDraft(draft_id);
+        return ResponseEntity.ok(new ApiResponse("Draft rejected!"));
+    }
+
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateRequirement(@PathVariable Integer id, @Valid @RequestBody RequirementRequestDTO requirementRequestDTO) {

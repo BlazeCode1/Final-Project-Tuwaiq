@@ -45,4 +45,28 @@ public class UserStoryController {
         userStoryService.deleteUserStory(id);
         return ResponseEntity.ok(new ApiResponse("UserStory deleted successfully"));
     }
+    @PostMapping("/generate/{requirement_id}")
+    public ResponseEntity<?> generateUserStories(@PathVariable Integer requirement_id){
+        userStoryService.extractUserStories(requirement_id);
+        return ResponseEntity.ok(new ApiResponse("User Stories Generated!"));
+    }
+
+    @GetMapping("/draft/requirement/{requirement_id}")
+    public ResponseEntity<?> getAllDraftUserStoriesWithRequirementId(@PathVariable Integer requirement_id){
+        return ResponseEntity.ok(userStoryService.getAllDraftsByRequirementId(requirement_id));
+    }
+    @GetMapping("/draft/get/{draft_id}")
+    public ResponseEntity<?> getDraftById(@PathVariable Integer draft_id){
+        return ResponseEntity.ok(userStoryService.getDraftById(draft_id));
+    }
+    @PostMapping("/draft/accept/{draft_id}")
+    public ResponseEntity<?> acceptDraft(@PathVariable Integer draft_id){
+        userStoryService.acceptDraft(draft_id);
+        return ResponseEntity.ok(new ApiResponse("Draft accepted!"));
+    }
+    @DeleteMapping("/draft/reject/{draft_id}")
+    public ResponseEntity<?> rejectDraft(@PathVariable Integer draft_id){
+        userStoryService.rejectDraft(draft_id);
+        return ResponseEntity.ok(new ApiResponse("Draft rejected!"));
+    }
 }
