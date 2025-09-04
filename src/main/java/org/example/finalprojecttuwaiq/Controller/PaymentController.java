@@ -2,6 +2,7 @@ package org.example.finalprojecttuwaiq.Controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.finalprojecttuwaiq.Api.ApiResponse;
 import org.example.finalprojecttuwaiq.DTO.PaymentRequestDTO;
 import org.example.finalprojecttuwaiq.Service.PaymentService;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +53,14 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.subScribeMonthly(baID, transaction_id, status, message));
     }
 
+    @GetMapping("/subscription/status/{baID}")
+    public ResponseEntity<?> getSubscriptionStatus(@PathVariable Integer baID){
+        return ResponseEntity.ok(paymentService.getSubscriptionStatus(baID));
+    }
 
+    @PostMapping("/subscription/cancel/{baID}")
+    public ResponseEntity<?> cancelSubscription(@PathVariable Integer baID){
+        paymentService.cancelSubscription(baID);
+        return ResponseEntity.ok(new ApiResponse("subscription canceled successfully"));
+    }
 }

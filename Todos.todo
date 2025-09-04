@@ -14,6 +14,4 @@ TODO Create S3 Buckets to save each pdf file with a link
 #Project
 TODO Project, approval status
 TODO generating push project info to Jira
-TODO end-points
-    // cancel sub
-    // get sub status
+TODO check for subscription status in each and every end-point related to BA workflow
