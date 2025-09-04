@@ -71,7 +71,7 @@ public class ProjectService {
         int limit = 3;
         String name = project.getName();
         String desc = project.getDescription();
-
+        //STRING
         String prompt =
                 "You are a market analyst AI.\n\n" +
                         "TASK:\n" +
