@@ -13,7 +13,6 @@ public class RequirementMapper {
         entity.setDescription(dto.getDescription());
         entity.setType(dto.getType());
         entity.setPriority(dto.getPriority());
-        entity.setStatus(dto.getStatus());
         entity.setSource(dto.getSource());
         entity.setRationale(dto.getRationale());
         entity.setProject(project);
