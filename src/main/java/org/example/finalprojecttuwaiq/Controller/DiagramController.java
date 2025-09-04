@@ -1,9 +1,7 @@
 package org.example.finalprojecttuwaiq.Controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiResponse;
-import org.example.finalprojecttuwaiq.DTO.DiagramRequestDTO;
 import org.example.finalprojecttuwaiq.Model.Diagram;
 import org.example.finalprojecttuwaiq.Service.DiagramService;
 import org.springframework.http.ResponseEntity;
@@ -28,17 +26,6 @@ public class DiagramController {
         return ResponseEntity.ok(diagramService.getDiagramById(id));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addDiagram(@Valid @RequestBody DiagramRequestDTO diagramRequestDTO) {
-        diagramService.addDiagram(diagramRequestDTO);
-        return ResponseEntity.status(201).body(new ApiResponse("Diagram added successfully"));
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse> updateDiagram(@PathVariable Integer id, @Valid @RequestBody DiagramRequestDTO diagramRequestDTO) {
-        diagramService.updateDiagram(id, diagramRequestDTO);
-        return ResponseEntity.ok(new ApiResponse("Diagram updated successfully"));
-    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse> deleteDiagram(@PathVariable Integer id) {
