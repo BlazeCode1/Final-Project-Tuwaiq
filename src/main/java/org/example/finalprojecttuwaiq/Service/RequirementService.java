@@ -146,4 +146,57 @@ public class RequirementService {
         Requirement requirement = requirementRepository.findById(id).orElseThrow(() -> new ApiException("Requirement with id " + id + " not found"));
         requirementRepository.delete(requirement);
     }
+
+    public String generateUiLayoutJson(Integer requirementId) {
+        Requirement requirement = requirementRepository.findById(requirementId)
+                .orElseThrow(() -> new ApiException("Requirement with id " + requirementId + " not found"));
+        if (requirement == null)
+            throw new ApiException("Requirement Not Found");
+
+        try {
+            String requirementJson = objectMapper.writeValueAsString(requirement);
+            String prompt = """
+            You are a UI wireframe generator.
+
+            Task:
+            - Convert the following requirement object into ONE UI layout JSON object.
+            - Use available fields (title, description, type, priority, status, source, rationale, projectId) to infer pages and components.
+            - Output ONLY a valid JSON object. No markdown, no code fences, no comments, no extra text.
+            - The FIRST character MUST be '{' and the LAST character MUST be '}'.
+
+            JSON schema (must match keys and types):
+            {
+              "name": string,
+              "meta": { "platform": "web"|"mobile"|"tablet", "gridColumns": number, "unit": "px"|"rem" },
+              "pages": [
+                {
+                  "id": string,
+                  "name": string,
+                  "size": { "w": number, "h": number },
+                  "components": [
+                    { "id": string, "type": string, "x": number, "y": number, "w": number, "h": number, "props": object }
+                  ]
+                }
+              ]
+            }
+
+            Rules:
+            - Derive 1–3 pages that best fit the requirement intent (e.g., Login, Dashboard, Settings).
+            - If platform is web, assume a 12-column grid; use pixel units for x,y,w,h.
+            - Keep IDs stable (snake_case or kebab-case). Names should be human-readable.
+            - Use common components only: Sidebar, Topbar, Card, CardGroup, Chart, Table, Form, Input, Button, List, Tabs.
+            - Keep it concise and realistic. No empty arrays, no nulls.
+            - Do NOT include any text outside the JSON object.
+
+            Requirement Object:
+            %s
+            """.formatted(requirementJson);
+
+            // Return the raw JSON produced by the model
+            return ai.call(prompt);
+        } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+            throw new ApiException("Failed To Parse Json :" + e.getMessage());
+        }
+    }
+
 }

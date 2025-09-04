@@ -125,7 +125,7 @@ public class DocumentService {
     }
 
 
-    public void generateFRD(Integer project_id) throws IOException {
+    public void  generateFRD(Integer project_id) throws IOException {
         Project project = projectRepository.findProjectById(project_id);
         if (project == null)
             throw new ApiException("Project Not found");

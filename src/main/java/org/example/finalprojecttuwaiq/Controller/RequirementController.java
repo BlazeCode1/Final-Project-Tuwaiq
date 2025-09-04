@@ -67,4 +67,10 @@ public class RequirementController {
         requirementService.deleteRequirement(id);
         return ResponseEntity.ok(new ApiResponse("Requirement deleted successfully"));
     }
+
+    @PostMapping("/wireframe/{requirementId}")
+    public ResponseEntity<?> generateFromRequirement(@PathVariable Integer requirementId) {
+        String mermaid = requirementService.generateUiLayoutJson(requirementId);
+        return ResponseEntity.ok(new ApiResponse(mermaid));
+    }
 }
