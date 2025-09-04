@@ -1,9 +1,7 @@
 package org.example.finalprojecttuwaiq.Controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiResponse;
-import org.example.finalprojecttuwaiq.DTO.DocumentRequestDTO;
 import org.example.finalprojecttuwaiq.Model.Document;
 import org.example.finalprojecttuwaiq.Service.DocumentService;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +27,7 @@ public class DocumentController {
         return ResponseEntity.ok(documentService.getDocumentById(id));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addDocument(@Valid @RequestBody DocumentRequestDTO documentRequestDTO) {
-        documentService.addDocument(documentRequestDTO);
-        return ResponseEntity.status(201).body(new ApiResponse("Document added successfully"));
-    }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse> updateDocument(@PathVariable Integer id, @Valid @RequestBody DocumentRequestDTO documentRequestDTO) {
-        documentService.updateDocument(id, documentRequestDTO);
-        return ResponseEntity.ok(new ApiResponse("Document updated successfully"));
-    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse> deleteDocument(@PathVariable Integer id) {

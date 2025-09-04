@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiException;
-import org.example.finalprojecttuwaiq.DTO.RequirementRequestDTO;
 import org.example.finalprojecttuwaiq.DTO.UserStoryRequestDTO;
 import org.example.finalprojecttuwaiq.Model.*;
 import org.example.finalprojecttuwaiq.Repository.DraftUserStoryRepository;
@@ -58,7 +57,7 @@ public class UserStoryService {
                     - Output ONLY a valid JSON array.
                     - The first character of the output MUST be '[' and the last character MUST be ']'.
                     - Do NOT include markdown, code fences, comments, explanations, or any text outside the JSON array.
-                    
+                    - Do Not Write ```json in front of the text, Write them as Json Objects directly
                     Each JSON object must map exactly to this DTO:
                     {
                       "asA": "...",

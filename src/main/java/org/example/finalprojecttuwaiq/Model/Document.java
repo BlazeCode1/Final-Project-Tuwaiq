@@ -3,6 +3,7 @@ package org.example.finalprojecttuwaiq.Model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -17,7 +18,7 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Pattern(regexp = "^(BRD|FRD)$", message = "Type must be one of BRD, FRD, UserStoryPack, ValidationReport, DesignDoc")
+    @Pattern(regexp = "^(BRD|FRD)$", message = "Type must be one of BRD, FRD")
     private String type;
 
     @NotEmpty(message = "Title cannot be blank")
@@ -28,13 +29,10 @@ public class Document {
     @Size(max = 2048, message = "Content URI cannot exceed 2048 characters")
     private String contentURI;
 
-    @Min(value = 1, message = "Version must be at least 1")
-    private int version;
 
-    @NotNull(message = "Last updated date cannot be null")
-    private LocalDateTime lastUpdated;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    @NotNull(message = "Project cannot be null")
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;

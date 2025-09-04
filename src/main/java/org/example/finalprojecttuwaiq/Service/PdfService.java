@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 public class PdfService {
     private static final String OUTPUT_DIR = "generated-pdfs/";
 
-    public void generatePdf(String fileName, String markdownContent) throws IOException {
+    public String generatePdf(String fileName, String markdownContent) throws IOException {
         Files.createDirectories(Paths.get(OUTPUT_DIR));
         String filePath = OUTPUT_DIR + fileName;
 
@@ -34,6 +34,6 @@ public class PdfService {
         } catch (Exception e) {
             throw new RuntimeException("Error generating PDF", e);
         }
-
+    return filePath;
     }
 }
