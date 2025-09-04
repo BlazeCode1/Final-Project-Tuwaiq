@@ -1,8 +1,5 @@
-
-
 # Diagrams
 TODO Generating diagrams using AI for mermaid {Still}
-
 
 #Documents
 TODO generate FRD documents using AI {Done but need to enhance last section}
@@ -15,3 +12,7 @@ TODO Create S3 Buckets to save each pdf file with a link
 TODO Project, approval status
 TODO generating push project info to Jira
 TODO check for subscription status in each and every end-point related to BA workflow
+
+#Abdullah
+TODO Integrate Whatsapp API
+TODO Integrate SMS API
