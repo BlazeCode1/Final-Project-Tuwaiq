@@ -36,9 +36,9 @@ public class ProjectService {
 
     public void addProject(Integer ba_id, ProjectRequestDTO projectRequestDTO) {
         BA businessAnalyst = baRepository.findBAById(ba_id);
-        if(businessAnalyst == null)
+        if (businessAnalyst == null)
             throw new ApiException("Business Analyst Not Found");
-        if(!businessAnalyst.getUser().getRole().equalsIgnoreCase("BA"))
+        if (!businessAnalyst.getUser().getRole().equalsIgnoreCase("BA"))
             throw new ApiException("Must Be Business Analyst to add A project");
         Project project = new Project();
         project.setName(projectRequestDTO.getName());
@@ -68,26 +68,47 @@ public class ProjectService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ApiException("Project with id " + projectId + " not found"));
 
-        int limit = 3;
-        String name = project.getName();
-        String desc = project.getDescription();
+        String prompt = """
+                You are a market analyst AI.
+                
+                TASK:
+                - Identify up to %d direct competitors for the project below in Saudi Arabia (KSA).
+                - Use web knowledge and include real websites plus at least 2 source URLs per competitor.
+                - Return ONLY a valid JSON object (no markdown, no extra text).
+                - The first character MUST be '{' and the last character MUST be '}'.
+                
+                JSON SHAPE:
+                { 
+                  "project": { 
+                    "id": %d, 
+                    "name": "...", 
+                    "description": "..." 
+                  }, 
+                  "competitors": [ 
+                    { 
+                      "name": "...", 
+                      "website": "https://...", 
+                      "similarity": 0-100, 
+                      "reasoning": "...", 
+                      "key_features": ["..."], 
+                      "overlaps": ["..."], 
+                      "gaps": ["..."], 
+                      "price_tier": "LOW|MID|HIGH|null", 
+                      "sources": ["https://...","https://..."] 
+                    } 
+                  ], 
+                  "summary": { 
+                    "gaps_union": ["..."], 
+                    "differentiators_union": ["..."], 
+                    "action_items": ["..."] 
+                  } 
+                }
+                
+                PROJECT:
+                - Name: %s
+                - Description: %s
+                """.formatted(3, project.getId(), project.getName(), project.getDescription());
 
-        String prompt =
-                "You are a market analyst AI.\n\n" +
-                        "TASK:\n" +
-                        "- Identify up to " + limit + " direct competitors for the project below in Saudi Arabia (KSA).\n" +
-                        "- Use web knowledge and include real websites plus at least 2 source URLs per competitor.\n" +
-                        "- Return ONLY a valid JSON object (no markdown, no extra text).\n" +
-                        "- The first character MUST be '{' and the last character MUST be '}'.\n\n" +
-                        "JSON SHAPE:\n" +
-                        "{ \"project\": { \"id\": " + project.getId() + ", \"name\": \"...\", \"description\": \"...\" }, " +
-                        "\"competitors\": [{ \"name\": \"...\", \"website\": \"https://...\", \"similarity\": 0-100, " +
-                        "\"reasoning\": \"...\", \"key_features\": [\"...\"], \"overlaps\": [\"...\"], \"gaps\": [\"...\"], " +
-                        "\"price_tier\": \"LOW|MID|HIGH|null\", \"sources\": [\"https://...\",\"https://...\"] }], " +
-                        "\"summary\": { \"gaps_union\": [\"...\"], \"differentiators_union\": [\"...\"], \"action_items\": [\"...\"] } }\n\n" +
-                        "PROJECT:\n" +
-                        "- Name: " + name + "\n" +
-                        "- Description: " + desc + "\n";
 
         String raw = ai.call(prompt);
         int s = raw.indexOf('{');
@@ -96,7 +117,8 @@ public class ProjectService {
         String json = raw.substring(s, e + 1).trim();
 
         try {
-            return objectMapper.readValue(json, new com.fasterxml.jackson.core.type.TypeReference<Map<String, Object>>() {});
+            return objectMapper.readValue(json, new com.fasterxml.jackson.core.type.TypeReference<Map<String, Object>>() {
+            });
         } catch (Exception ex) {
             throw new ApiException("Invalid AI JSON");
         }
