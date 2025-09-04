@@ -52,4 +52,11 @@ public class DocumentController {
         documentService.generateBRD(project_id);
         return ResponseEntity.ok(new ApiResponse("Generated BRD Successfully"));
     }
+
+
+    @PostMapping("/generate/frd/{project_id}")
+    public ResponseEntity<?> generateFRD(@PathVariable Integer project_id) throws IOException {
+        documentService.generateFRD(project_id);
+        return ResponseEntity.ok(new ApiResponse("Generated FRD Successfully"));
+    }
 }
