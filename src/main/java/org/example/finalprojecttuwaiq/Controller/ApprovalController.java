@@ -28,8 +28,6 @@ public class ApprovalController {
         return ResponseEntity.ok(approvalService.getApprovalById(id));
     }
 
-
-
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse> updateApproval(@PathVariable Integer id, @Valid @RequestBody ApprovalRequestDTO approvalRequestDTO) {
         approvalService.updateApproval(id, approvalRequestDTO);
@@ -45,5 +43,10 @@ public class ApprovalController {
     public ResponseEntity<?> sendApprovalRequest(@PathVariable Integer baId,@RequestBody @Valid ApprovalRequestDTO approvalRequestDTO){
         approvalService.sendApproval(baId,approvalRequestDTO);
         return ResponseEntity.ok().body(new ApiResponse("Request Sent Successfully"));
+    }
+
+    @GetMapping("/pending/{stakeholder_id}")
+    public ResponseEntity<?> getPendingApprovalsByStakeholder(@PathVariable Integer stakeholder_id){
+        return ResponseEntity.ok(approvalService.getPendingApprovalsByStakeholderId(stakeholder_id));
     }
 }
