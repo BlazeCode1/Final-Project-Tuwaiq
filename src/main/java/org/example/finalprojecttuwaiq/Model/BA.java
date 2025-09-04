@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +32,19 @@ public class BA {
     @NotEmpty(message = "Domain expertise cannot be blank")
     @Size(max = 255, message = "Domain expertise cannot exceed 255 characters")
     private String domainExpertise;
-    //TODO: isSubscribe boolean
+
+    @Column(columnDefinition = "boolean default false")
+    // can be null
+    Boolean isSubscribed = false;
+
+    @Column(columnDefinition = "date")
+    // can be null
+    LocalDate subscriptionStartDate;
+
+    @Column(columnDefinition = "date")
+    // can be null
+    LocalDate subscriptionEndDate;
+
     @OneToOne
     @MapsId
     @JsonIgnore
