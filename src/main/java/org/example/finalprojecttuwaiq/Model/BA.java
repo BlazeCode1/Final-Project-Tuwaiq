@@ -50,6 +50,8 @@ public class BA {
     @JsonIgnore
     private User user;
 
+    @OneToMany(mappedBy = "ba", cascade = CascadeType.ALL)
+    private Set<Approval> approvals;
 
     @ManyToMany
     @JoinTable(

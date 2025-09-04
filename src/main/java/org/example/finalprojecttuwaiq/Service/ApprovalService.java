@@ -3,6 +3,7 @@ package org.example.finalprojecttuwaiq.Service;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiException;
 import org.example.finalprojecttuwaiq.DTO.ApprovalRequestDTO;
+import org.example.finalprojecttuwaiq.DTO.ApprovalResponseDTO;
 import org.example.finalprojecttuwaiq.Model.Approval;
 import org.example.finalprojecttuwaiq.Model.BA;
 import org.example.finalprojecttuwaiq.Model.Document;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +61,52 @@ public class ApprovalService {
         approval.setDocument(document);
         approvalRepository.save(approval);
         mailService.sendApprovalRequestEmail(stakeholder,document,ba);
+    }
+
+    public void acceptApproval(ApprovalResponseDTO approvalResponseDTO){
+        Approval approval = approvalRepository.findById(approvalResponseDTO.getApprovalId())
+                .orElseThrow(() -> new ApiException("Approval with ID "+approvalResponseDTO.getApprovalId()+" not found"));
+
+        Stakeholder stakeholder = stakeholderRepository.findById(approvalResponseDTO.getStakeholderId())
+                .orElseThrow(()-> new ApiException("Approval with ID "+approvalResponseDTO.getStakeholderId()+" not found"));
+
+        if (Objects.equals(approval.getStakeholder().getId(), stakeholder.getId())){
+            throw new ApiException("This stakeholder is not authorized to approve this request.");
+        }
+
+        BA ba = approval.getBa();
+        if (ba == null){
+            throw new ApiException("Approval requester (BA) is missing or has no email.");
+        }
+
+        approval.setStatus("APPROVED");
+        approval.setReviewedAt(LocalDateTime.now());
+        approval.setComments(approvalResponseDTO.getComment());
+        approvalRepository.save(approval);
+        mailService.sendApprovedEmail(ba,approval.getDocument(),stakeholder);
+    }
+
+    public void rejectApproval(ApprovalResponseDTO approvalResponseDTO){
+        Approval approval = approvalRepository.findById(approvalResponseDTO.getApprovalId())
+                .orElseThrow(() -> new ApiException("Approval with ID "+approvalResponseDTO.getApprovalId()+" not found"));
+
+        Stakeholder stakeholder = stakeholderRepository.findById(approvalResponseDTO.getStakeholderId())
+                .orElseThrow(()-> new ApiException("Approval with ID "+approvalResponseDTO.getStakeholderId()+" not found"));
+
+        if (Objects.equals(approval.getStakeholder().getId(), stakeholder.getId())){
+            throw new ApiException("This stakeholder is not authorized to approve this request.");
+        }
+
+        BA ba = approval.getBa();
+        if (ba == null){
+            throw new ApiException("Approval requester (BA) is missing or has no email.");
+        }
+
+        approval.setStatus("REJECTED");
+        approval.setReviewedAt(LocalDateTime.now());
+        approval.setComments(approvalResponseDTO.getComment());
+        approvalRepository.save(approval);
+        mailService.sendApprovedEmail(ba,approval.getDocument(),stakeholder);
     }
 
     public void updateApproval(Integer id, ApprovalRequestDTO approvalRequestDTO) {
