@@ -17,7 +17,7 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Pattern(regexp = "^(BRD|FRD|UserStoryPack|ValidationReport|DesignDoc)$", message = "Type must be one of BRD, FRD, UserStoryPack, ValidationReport, DesignDoc")
+    @Pattern(regexp = "^(BRD|FRD)$", message = "Type must be one of BRD, FRD, UserStoryPack, ValidationReport, DesignDoc")
     private String type;
 
     @NotEmpty(message = "Title cannot be blank")

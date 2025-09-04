@@ -32,11 +32,9 @@ public class Requirement {
     @Pattern(regexp = "^(Business|Functional|NonFunctional|Regulatory|Constraint)$", message = "Type must be one of Business, Functional, NonFunctional, Regulatory, Constraint")
     private String type;
 
-    @Pattern(regexp = "^(Must|Should|Could|Wont|High|Medium|Low)$", message = "Priority must be one of Must, Should, Could, Wont, High, Medium, Low")
+    @Pattern(regexp = "^(Must|Should|Could|Wont)$", message = "Priority must be one of Must, Should, Could, Wont, High, Medium, Low")
     private String priority;
 
-    @Pattern(regexp = "^(Draft|Analyzed|Validated|Approved|Deprecated)$", message = "Status must be one of Draft, Analyzed, Validated, Approved, Deprecated")
-    private String status;
 
     @Size(max = 255, message = "Source cannot exceed 255 characters")
     private String source;

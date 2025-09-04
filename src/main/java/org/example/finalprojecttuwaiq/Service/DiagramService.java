@@ -57,4 +57,6 @@ public class DiagramService {
         Diagram diagram = diagramRepository.findById(id).orElseThrow(() -> new ApiException("Diagram with id " + id + " not found"));
         diagramRepository.delete(diagram);
     }
+
+    //TODO: Generate Class, Sequence, Use Case, ERD Diagram.
 }

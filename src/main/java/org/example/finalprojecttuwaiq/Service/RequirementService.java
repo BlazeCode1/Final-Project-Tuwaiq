@@ -135,7 +135,6 @@ public class RequirementService {
         existingRequirement.setDescription(requirementRequestDTO.getDescription());
         existingRequirement.setType(requirementRequestDTO.getType());
         existingRequirement.setPriority(requirementRequestDTO.getPriority());
-        existingRequirement.setStatus(requirementRequestDTO.getStatus());
         existingRequirement.setSource(requirementRequestDTO.getSource());
         existingRequirement.setRationale(requirementRequestDTO.getRationale());
         // traceId is not updated here as it's typically set on creation
