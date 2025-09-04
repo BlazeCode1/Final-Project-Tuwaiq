@@ -68,6 +68,7 @@ public class ProjectService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ApiException("Project with id " + projectId + " not found"));
 
+
         String prompt = """
                 You are a market analyst AI.
                 
@@ -108,6 +109,7 @@ public class ProjectService {
                 - Name: %s
                 - Description: %s
                 """.formatted(3, project.getId(), project.getName(), project.getDescription());
+
 
 
         String raw = ai.call(prompt);

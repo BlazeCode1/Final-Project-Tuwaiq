@@ -1,11 +1,19 @@
-TODO Generating diagrams using AI for mermaid
+
+
+# Diagrams
+TODO Generating diagrams using AI for mermaid {Still}
+
+
+#Documents
 TODO generate FRD documents using AI {Done but need to enhance last section}
 TODO saving documents in the DB
 TODO resolving document versions
 TODO document fix String type
+TODO Create S3 Buckets to save each pdf file with a link
+
+#Project
 TODO Project, approval status
 TODO generating push project info to Jira
-
 TODO end-points
     // cancel sub
     // get sub status

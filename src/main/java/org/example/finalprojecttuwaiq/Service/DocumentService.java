@@ -67,7 +67,7 @@ public class DocumentService {
     }
 
 
-    //TODO: Generating Documents like BRD, FRD.
+    //TODO: Generating Documents like BRD.
     public void generateBRD(Integer project_id) throws IOException {
         Project project = projectRepository.findProjectById(project_id);
         if (project == null)
@@ -123,7 +123,6 @@ public class DocumentService {
         //OUTPUT FILE
         pdf.generatePdf("BRD-" + project.getName(), fullHtml);
     }
-
 
 
     public void generateFRD(Integer project_id) throws IOException {
