@@ -28,11 +28,7 @@ public class ApprovalController {
         return ResponseEntity.ok(approvalService.getApprovalById(id));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addApproval(@Valid @RequestBody ApprovalRequestDTO approvalRequestDTO) {
-        approvalService.addApproval(approvalRequestDTO);
-        return ResponseEntity.status(201).body(new ApiResponse("Approval added successfully"));
-    }
+
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse> updateApproval(@PathVariable Integer id, @Valid @RequestBody ApprovalRequestDTO approvalRequestDTO) {
@@ -44,5 +40,10 @@ public class ApprovalController {
     public ResponseEntity<ApiResponse> deleteApproval(@PathVariable Integer id) {
         approvalService.deleteApproval(id);
         return ResponseEntity.ok(new ApiResponse("Approval deleted successfully"));
+    }
+    @PostMapping("/{baId}/send/")
+    public ResponseEntity<?> sendApprovalRequest(@PathVariable Integer baId,@RequestBody @Valid ApprovalRequestDTO approvalRequestDTO){
+        approvalService.sendApproval(baId,approvalRequestDTO);
+        return ResponseEntity.ok().body(new ApiResponse("Request Sent Successfully"));
     }
 }
