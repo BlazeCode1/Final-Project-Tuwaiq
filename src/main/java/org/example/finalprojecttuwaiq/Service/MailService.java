@@ -16,7 +16,6 @@ public class MailService {
     private final SimpleMailMessage mailMessage = new SimpleMailMessage();
 
     public void sendApprovalRequestEmail(Stakeholder stakeholder, Document document, BA requester) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("alimuaffag@gmail.com");
         mailMessage.setTo(stakeholder.getUser().getEmail());
         mailMessage.setSubject("Approval Request: " + document.getTitle());

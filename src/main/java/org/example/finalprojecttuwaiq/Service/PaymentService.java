@@ -2,11 +2,18 @@ package org.example.finalprojecttuwaiq.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
+import org.example.finalprojecttuwaiq.Api.ApiException;
 import org.example.finalprojecttuwaiq.DTO.PaymentRequestDTO;
+import org.example.finalprojecttuwaiq.DTO.SubscriptionDTO;
+import org.example.finalprojecttuwaiq.Model.BA;
+import org.example.finalprojecttuwaiq.Repository.BARepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +24,22 @@ public class PaymentService {
 
     private static final String MOYASAR_API_URL = "https://api.moyasar.com/v1/payments";
 
-    public ResponseEntity<String> processPaymentYearly(PaymentRequestDTO paymentRequestDTO) {
-        String callbackUrl = "http://localhost:8080/api/v1/invoice/callback";
+    private final BARepository baRepository;
+    private final Integer yearlyAmount = 600;
+    private final Integer monthlyAmount = 99;
+
+    public ResponseEntity<String> processPaymentYearly(Integer baID, PaymentRequestDTO paymentRequestDTO) {
+        BA ba = baRepository.findBAById(baID);
+
+        if (ba == null){
+            throw new ApiException("Error, the business analyst does not exist");
+        }
+
+        if (ba.getIsSubscribed() && ba.getSubscriptionEndDate().isAfter(LocalDate.now())){
+            throw new ApiException("Error, the current subscription is still active (not expired)");
+        }
+
+        String callbackUrl = "http://localhost:8080/api/v1/payment/callback/yearly/"+baID;
 
 
         //create the body
@@ -28,7 +49,7 @@ public class PaymentService {
                 paymentRequestDTO.getCardCvc(),
                 paymentRequestDTO.getCardMonth(),
                 paymentRequestDTO.getCardYear(),
-                 (600 * 100),
+                 (yearlyAmount * 100),
                 "SAR",
                 callbackUrl);
 
@@ -48,14 +69,22 @@ public class PaymentService {
                 HttpMethod.POST,
                 entity,
                 JsonNode.class);
-
+        // the response body from Moyasar includes the payment process URL as a JSON
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody().toString());
     }
 
-    public ResponseEntity<String> processPaymentMonthly(PaymentRequestDTO paymentRequestDTO) {
+    public ResponseEntity<String> processPaymentMonthly(Integer baID, PaymentRequestDTO paymentRequestDTO) {
+        BA ba = baRepository.findBAById(baID);
 
+        if (ba == null){
+            throw new ApiException("Error, the business analyst does not exist");
+        }
 
-        String callbackUrl = "http://localhost:8080/api/v1/invoice/callback";
+        if (ba.getIsSubscribed() && ba.getSubscriptionEndDate().isAfter(LocalDate.now())){
+            throw new ApiException("Error, the current subscription is still active (not expired)");
+        }
+
+        String callbackUrl = "http://localhost:8080/api/v1/payment/callback/monthly/"+baID;
 
 
         //create the body
@@ -65,7 +94,7 @@ public class PaymentService {
                 paymentRequestDTO.getCardCvc(),
                 paymentRequestDTO.getCardMonth(),
                 paymentRequestDTO.getCardYear(),
-                (99 * 100),
+                (monthlyAmount * 100),
                 "SAR",
                 callbackUrl);
 
@@ -109,6 +138,117 @@ public class PaymentService {
 
         //return the response
         return response.getBody();
+    }
+
+    public SubscriptionDTO subScribeYearly(Integer baID, String transaction_id, String status, String message){
+        BA ba = baRepository.findBAById(baID);
+
+        if (ba == null){
+            throw new ApiException("Error, the business analyst does not exist");
+        }
+
+        //  check the payment status from Moyasar to see if it is a correct call back vs malicious callback
+        String response = getPaymentStatus(transaction_id);
+        JSONObject paymentStatus = new JSONObject(response);
+
+        // sample from Moyasar
+        // {"id":"6bef16fa-37a1-42af-ae0b-3b52e9c441f2"},
+        // "status":"paid",
+        // "amount":3000000,
+        // ...
+        // "callback_url":"http://localhost:8080/api/v1/payment/callback/yearly/1",
+        // ...
+        // "message":"APPROVED",
+        // ...
+
+        String moyasarStatus = paymentStatus.getString("status");
+
+        if (!status.equalsIgnoreCase(moyasarStatus)){
+            throw new ApiException("Error, the status received is inconsistent with moyasar");
+        }
+
+        // check the payment amount if it is correct
+        Integer moyasarAmount = paymentStatus.getInt("amount")/100; // return the amount without floats
+
+        if (!moyasarAmount.equals(yearlyAmount)){
+            throw new ApiException("Error, the amount "+moyasarAmount+"is not enough for a yearly subscription of "+yearlyAmount);
+        }
+
+        // save the subscription to the user if paid
+        if (!moyasarStatus.equalsIgnoreCase("PAID")){
+            throw new ApiException("Error, the invoice was not paid");
+        }
+
+        SubscriptionDTO subscriptionStatus = new SubscriptionDTO();
+
+        subscriptionStatus.setStatus("Subscribed successfully: Yearly, status: "+message);
+        subscriptionStatus.setIsSubscribed(true);
+        subscriptionStatus.setSubscriptionStartDate(LocalDate.now());
+        subscriptionStatus.setSubscriptionEndDate(LocalDate.now().plusMonths(12));
+
+        ba.setIsSubscribed(subscriptionStatus.getIsSubscribed());
+        ba.setSubscriptionStartDate(subscriptionStatus.getSubscriptionStartDate());
+        ba.setSubscriptionEndDate(subscriptionStatus.getSubscriptionEndDate());
+        baRepository.save(ba);
+
+        //  return subscriptionStatus to the user
+        return subscriptionStatus;
+    }
+
+    public SubscriptionDTO subScribeMonthly(Integer baID, String transaction_id, String status, String message){
+        BA ba = baRepository.findBAById(baID);
+
+        if (ba == null){
+            throw new ApiException("Error, the business analyst does not exist");
+        }
+
+        //  check the payment status from Moyasar to see if it is a correct call back vs malicious callback
+        String response = getPaymentStatus(transaction_id);
+        JSONObject paymentStatus = new JSONObject(response);
+
+        // sample from Moyasar
+        // {"id":"6bef16fa-37a1-42af-ae0b-3b52e9c441f2"},
+        // "status":"paid",
+        // "amount":3000000,
+        // ...
+        // "callback_url":"http://localhost:8080/api/v1/payment/callback/yearly/1",
+        // ...
+        // "message":"APPROVED",
+        // ...
+
+        String moyasarStatus = paymentStatus.getString("status");
+
+        if (!status.equalsIgnoreCase(moyasarStatus)){
+            throw new ApiException("Error, the status received is inconsistent with moyasar");
+        }
+
+        // check the payment amount if it is correct
+        Integer moyasarAmount = paymentStatus.getInt("amount")/100; // return the amount without floats
+
+        if (!moyasarAmount.equals(monthlyAmount)){
+            throw new ApiException("Error, the amount "+moyasarAmount+"is not enough for a monthly subscription of "+monthlyAmount);
+        }
+
+        // save the subscription to the user if paid
+        if (!moyasarStatus.equalsIgnoreCase("PAID")){
+            throw new ApiException("Error, the invoice was not paid");
+        }
+
+        SubscriptionDTO subscriptionStatus = new SubscriptionDTO();
+
+        subscriptionStatus.setStatus("Subscribed successfully: Monthly, status: "+message);
+        subscriptionStatus.setIsSubscribed(true);
+        subscriptionStatus.setSubscriptionStartDate(LocalDate.now());
+        subscriptionStatus.setSubscriptionEndDate(LocalDate.now().plusMonths(1));
+
+        ba.setIsSubscribed(subscriptionStatus.getIsSubscribed());
+        ba.setSubscriptionStartDate(subscriptionStatus.getSubscriptionStartDate());
+        ba.setSubscriptionEndDate(subscriptionStatus.getSubscriptionEndDate());
+        baRepository.save(ba);
+
+        //  return subscriptionStatus to the user
+        return subscriptionStatus;
+
     }
 }
 

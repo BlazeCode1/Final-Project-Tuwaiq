@@ -1,6 +1,5 @@
 package org.example.finalprojecttuwaiq.Service;
 
-import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiException;
 import org.example.finalprojecttuwaiq.DTO.ApprovalRequestDTO;
@@ -37,6 +36,12 @@ public class ApprovalService {
         return approvalRepository.findById(id).orElseThrow(() -> new ApiException("Approval with id " + id + " not found"));
     }
 
+    public List<Approval> getPendingApprovalsByStakeholderId(Integer stakeholder_id){
+        Stakeholder stakeholder = stakeholderRepository.findById(stakeholder_id)
+                .orElseThrow(() -> new ApiException("StakeHolder Not Found"));
+        return approvalRepository.getApprovalsByStakeholderAndStatus(stakeholder,"PENDING");
+    }
+
 
 
     public void sendApproval(Integer baId, ApprovalRequestDTO approvalRequestDTO) {
@@ -54,8 +59,8 @@ public class ApprovalService {
         approval.setReviewedAt(LocalDateTime.now());
         approval.setStakeholder(stakeholder);
         approval.setDocument(document);
-        mailService.sendApprovalRequestEmail(stakeholder,document,ba);
         approvalRepository.save(approval);
+        mailService.sendApprovalRequestEmail(stakeholder,document,ba);
     }
 
     public void acceptApproval(ApprovalResponseDTO approvalResponseDTO){

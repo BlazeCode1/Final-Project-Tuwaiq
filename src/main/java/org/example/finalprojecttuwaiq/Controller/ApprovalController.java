@@ -48,6 +48,7 @@ public class ApprovalController {
         return ResponseEntity.ok().body(new ApiResponse("Request Sent Successfully"));
     }
 
+
     @PostMapping("/approve")
     public ResponseEntity<?> acceptApproval(@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) {
         approvalService.acceptApproval(approvalResponseDTO);
@@ -58,5 +59,10 @@ public class ApprovalController {
     public ResponseEntity<?> rejectApproval(@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) {
         approvalService.rejectApproval(approvalResponseDTO);
         return ResponseEntity.ok().body(new ApiResponse("Document rejected"));
+
+    @GetMapping("/pending/{stakeholder_id}")
+    public ResponseEntity<?> getPendingApprovalsByStakeholder(@PathVariable Integer stakeholder_id){
+        return ResponseEntity.ok(approvalService.getPendingApprovalsByStakeholderId(stakeholder_id));
+
     }
 }
