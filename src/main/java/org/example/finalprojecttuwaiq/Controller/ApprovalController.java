@@ -59,6 +59,7 @@ public class ApprovalController {
     public ResponseEntity<?> rejectApproval(@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) {
         approvalService.rejectApproval(approvalResponseDTO);
         return ResponseEntity.ok().body(new ApiResponse("Document rejected"));
+    }
 
     @GetMapping("/pending/{stakeholder_id}")
     public ResponseEntity<?> getPendingApprovalsByStakeholder(@PathVariable Integer stakeholder_id){
