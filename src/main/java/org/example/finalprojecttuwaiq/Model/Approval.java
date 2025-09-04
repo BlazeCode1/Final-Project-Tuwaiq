@@ -32,6 +32,11 @@ public class Approval {
     @NotNull(message = "Reviewed at date cannot be null")
     private LocalDateTime reviewedAt;
 
+    @NotNull(message = "Business analyst cannot be null")
+    @ManyToOne
+    @JoinColumn(name = "ba_id")
+    private BA ba;
+
     @NotNull(message = "Stakeholder cannot be null")
     @ManyToOne
     @JoinColumn(name = "stakeholder_id")
