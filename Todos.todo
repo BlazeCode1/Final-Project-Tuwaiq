@@ -5,7 +5,4 @@ TODO resolving document versions
 TODO document fix String type
 TODO Project, approval status
 TODO generating push project info to Jira
-
-TODO end-points
-    // cancel sub
-    // get sub status
+TODO check for subscription status in each and every end-point related to BA workflow
