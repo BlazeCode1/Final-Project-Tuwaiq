@@ -2,14 +2,14 @@
 TODO Generating diagrams using AI for mermaid {Still}
 
 #Documents
-TODO generate FRD documents using AI {Done but need to enhance last section}
 TODO saving documents in the DB {DONE}
 TODO document fix String type {DONE}
 TODO Create S3 Buckets to save each pdf file with a link {DONE}
+TODO FRD, BRD prompts fix {DONE}
 
 #Project
-TODO Project, approval status
-TODO generating push project info to Jira
+TODO Project, approval status {Still}
+TODO generating push project info to Jira {Still}
 TODO check for subscription status in each and every end-point related to BA workflow
 
 #Abdullah
