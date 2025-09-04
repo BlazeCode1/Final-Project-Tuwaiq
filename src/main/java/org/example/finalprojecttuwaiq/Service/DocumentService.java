@@ -59,4 +59,7 @@ public class DocumentService {
         Document document = documentRepository.findById(id).orElseThrow(() -> new ApiException("Document with id " + id + " not found"));
         documentRepository.delete(document);
     }
+
+
+    //TODO: Generating Documents like BRD, FRD.
 }

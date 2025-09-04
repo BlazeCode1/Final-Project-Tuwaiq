@@ -32,7 +32,11 @@ public class Project {
     @Column(columnDefinition = "longtext")
     private String description;
 
-    @Pattern(regexp = "^(Discovery|Analysis|Documentation|Validation|Design|InDelivery)$", message = "Status must be one of Discovery, Analysis, Documentation, Validation, Design, InDelivery")
+    //TODO: After Generating Requirements Project Status Changes To Analysis
+    //TODO: Project Status Chagnes to Documentation After Generating Any Document
+    //TODO: When Requesting Approvals to stakeholders, Project Status Changes To Validation
+    //TODO: When Requesting Tools for tech solutions, Project Status Changes To InDelivery
+    @Pattern(regexp = "^(Discovery|Analysis|Documentation|Validation|InDelivery)$", message = "Status must be one of Discovery, Analysis, Documentation, Validation, Design, InDelivery")
     private String status;
 
     @CreationTimestamp

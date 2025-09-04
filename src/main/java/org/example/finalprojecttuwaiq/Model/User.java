@@ -1,9 +1,8 @@
 package org.example.finalprojecttuwaiq.Model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
