@@ -45,4 +45,9 @@ public class ProjectController {
         projectService.deleteProject(id);
         return ResponseEntity.ok(new ApiResponse("Project deleted successfully"));
     }
+
+    @PostMapping("/{projectId}/market-benchmark")
+    public ResponseEntity<?> benchmark(@PathVariable Integer projectId) {
+        return ResponseEntity.ok(projectService.marketBenchmarkPreview(projectId));
+    }
 }
