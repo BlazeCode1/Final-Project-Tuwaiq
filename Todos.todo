@@ -1,0 +1,11 @@
+TODO Generating diagrams using AI for mermaid
+TODO generate FRD documents using AI
+TODO saving documents in the DB
+TODO resolving document versions
+TODO document fix String type
+TODO Project, approval status
+TODO generating push project info to Jira
+
+TODO end-points
+    // cancel sub
+    // get sub status
