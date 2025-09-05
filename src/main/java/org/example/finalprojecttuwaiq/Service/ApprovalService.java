@@ -55,6 +55,7 @@ public class ApprovalService {
 
         Approval approval = new Approval();
         approval.setStatus("PENDING");
+        approval.setBa(ba);
         approval.setComments(approvalRequestDTO.getComments());
         approval.setReviewedAt(LocalDateTime.now());
         approval.setStakeholder(stakeholder);
@@ -70,7 +71,7 @@ public class ApprovalService {
         Stakeholder stakeholder = stakeholderRepository.findById(approvalResponseDTO.getStakeholderId())
                 .orElseThrow(()-> new ApiException("Approval with ID "+approvalResponseDTO.getStakeholderId()+" not found"));
 
-        if (Objects.equals(approval.getStakeholder().getId(), stakeholder.getId())){
+        if (!Objects.equals(approval.getStakeholder().getId(), stakeholder.getId())){
             throw new ApiException("This stakeholder is not authorized to approve this request.");
         }
 
@@ -93,7 +94,7 @@ public class ApprovalService {
         Stakeholder stakeholder = stakeholderRepository.findById(approvalResponseDTO.getStakeholderId())
                 .orElseThrow(()-> new ApiException("Approval with ID "+approvalResponseDTO.getStakeholderId()+" not found"));
 
-        if (Objects.equals(approval.getStakeholder().getId(), stakeholder.getId())){
+        if (!Objects.equals(approval.getStakeholder().getId(), stakeholder.getId())){
             throw new ApiException("This stakeholder is not authorized to approve this request.");
         }
 
@@ -104,6 +105,7 @@ public class ApprovalService {
 
         approval.setStatus("REJECTED");
         approval.setReviewedAt(LocalDateTime.now());
+        approval.setBa(ba);
         approval.setComments(approvalResponseDTO.getComment());
         approvalRepository.save(approval);
         mailService.sendApprovedEmail(ba,approval.getDocument(),stakeholder);
