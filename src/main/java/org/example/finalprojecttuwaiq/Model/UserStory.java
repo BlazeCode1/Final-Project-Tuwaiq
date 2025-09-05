@@ -19,7 +19,6 @@ public class UserStory {
 
     private String iWant;
 
-
     private String soThat;
 
     @Pattern(regexp = "^(Must|Should|Could|Wont)$", message = "Priority must be one of Must, Should, Could, Wont, High, Medium, Low")

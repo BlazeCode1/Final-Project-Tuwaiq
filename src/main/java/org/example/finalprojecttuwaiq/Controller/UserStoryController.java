@@ -69,4 +69,10 @@ public class UserStoryController {
         userStoryService.rejectDraft(draft_id);
         return ResponseEntity.ok(new ApiResponse("Draft rejected!"));
     }
+
+    @PostMapping("/generate-by-project/{project_id}")
+    public ResponseEntity<?> generateUserStoriesForProject(@PathVariable Integer project_id){
+        userStoryService.extractUserStoriesForProject(project_id);
+        return ResponseEntity.ok(new ApiResponse("User Stories Generated!"));
+    }
 }
