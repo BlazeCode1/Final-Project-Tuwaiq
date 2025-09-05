@@ -93,8 +93,12 @@ public class RequirementService {
     //TODO: Accept Draft And Map it to requirements By Id
     public void acceptDraft(Integer draft_id){
         DraftRequirement draftRequirement = draftRequirementRepository.findDraftRequirementById(draft_id);
+
         if(draftRequirement == null)
             throw new ApiException("Draft Not Found");
+        Project projectMain = projectRepository.findProjectById(draftRequirement.getProject_id());
+        if(projectMain == null)
+            throw new ApiException("Project Not found");
         try {
         List<RequirementRequestDTO> request = objectMapper.readValue(draftRequirement.getAiResponse(),new TypeReference<>() {}
         );
@@ -109,7 +113,8 @@ public class RequirementService {
                     .toList();
 
             requirementRepository.saveAll(entities);
-
+            projectMain.setStatus("Analysis");
+            projectRepository.save(projectMain);
         }catch (Exception e){
             throw new ApiException("Failed to parse AI JSON " + e.getMessage());
         }

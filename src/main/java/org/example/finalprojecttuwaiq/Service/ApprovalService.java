@@ -68,6 +68,7 @@ public class ApprovalService {
         Approval approval = approvalRepository.findById(approvalResponseDTO.getApprovalId())
                 .orElseThrow(() -> new ApiException("Approval with ID "+approvalResponseDTO.getApprovalId()+" not found"));
 
+
         Stakeholder stakeholder = stakeholderRepository.findById(approvalResponseDTO.getStakeholderId())
                 .orElseThrow(()-> new ApiException("Approval with ID "+approvalResponseDTO.getStakeholderId()+" not found"));
 
@@ -83,6 +84,7 @@ public class ApprovalService {
         approval.setStatus("APPROVED");
         approval.setReviewedAt(LocalDateTime.now());
         approval.setComments(approvalResponseDTO.getComment());
+        approval.getDocument().getProject().setStatus("Validation");
         approvalRepository.save(approval);
         mailService.sendApprovedEmail(ba,approval.getDocument(),stakeholder);
     }
