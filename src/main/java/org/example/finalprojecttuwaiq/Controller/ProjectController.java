@@ -59,6 +59,6 @@ public class ProjectController {
     @PostMapping("/assign/ba/{ba_id}/{project_id}")
     public ResponseEntity<?> addBusinessAnalystToProject(@PathVariable Integer ba_id,@PathVariable Integer project_id){
         projectService.addBusinessAnalystToProject(ba_id,project_id);
-        return ResponseEntity.ok(new ApiResponse("Assigned Stakeholder To Project"));
+        return ResponseEntity.ok(new ApiResponse("Assigned Business Analyst To Project"));
     }
 }

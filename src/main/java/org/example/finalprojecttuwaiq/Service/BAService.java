@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiException;
 import org.example.finalprojecttuwaiq.DTO.BARequestDTO;
 import org.example.finalprojecttuwaiq.Model.BA;
+import org.example.finalprojecttuwaiq.Model.Project;
 import org.example.finalprojecttuwaiq.Model.User;
 import org.example.finalprojecttuwaiq.Repository.BARepository;
 import org.example.finalprojecttuwaiq.Repository.UserRepository;
@@ -65,5 +66,9 @@ public class BAService {
         BA ba = baRepository.findById(id).orElseThrow(() -> new ApiException("BA with id " + id + " not found"));
         userRepository.delete(ba.getUser()); // Delete associated user
         baRepository.delete(ba);
+    }
+
+    public List<Project> findProjectsByBaId(Integer ba_id){
+        return baRepository.findProjectsByBaID(ba_id);
     }
 }

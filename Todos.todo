@@ -17,10 +17,10 @@ TODO Generate User Stories from all requirements
 #Project
 TODO Project, approval status {DONE}
 TODO check for subscription status in each and every end-point related to BA workflow
-TODO Make BA Invites Stakeholders and Bas into the project {still}
-TODO Accept Invitation {still}
+TODO Make BA Invites Stakeholders and Bas into the project {DONE}
 TODO generating push project info to Jira {Still}
-TODO Get Projects By Ba | Stakeholder
+TODO Get Projects By Ba | Stakeholder {DONE}
+TODO Project overview is set from the AI {STILL}
 #Abdullah
 TODO Test Whatsapp API
 TODO Integrate SMS API

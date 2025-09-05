@@ -3,6 +3,7 @@ package org.example.finalprojecttuwaiq.Service;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiException;
 import org.example.finalprojecttuwaiq.DTO.StakeholderRequestDTO;
+import org.example.finalprojecttuwaiq.Model.Project;
 import org.example.finalprojecttuwaiq.Model.Stakeholder;
 import org.example.finalprojecttuwaiq.Model.User;
 import org.example.finalprojecttuwaiq.Repository.StakeholderRepository;
@@ -65,5 +66,9 @@ public class StakeholderService {
         Stakeholder stakeholder = stakeholderRepository.findById(id).orElseThrow(() -> new ApiException("Stakeholder with id " + id + " not found"));
         userRepository.delete(stakeholder.getUser()); // Delete associated user
         stakeholderRepository.delete(stakeholder);
+    }
+
+    public List<Project> getProjectsByStakeholderId(Integer stakeholder_id){
+        return stakeholderRepository.findProjectsByStakeholderId(stakeholder_id);
     }
 }
