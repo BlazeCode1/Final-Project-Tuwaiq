@@ -6,9 +6,11 @@ import org.example.finalprojecttuwaiq.Api.ApiException;
 import org.example.finalprojecttuwaiq.DTO.ProjectRequestDTO;
 import org.example.finalprojecttuwaiq.Model.BA;
 import org.example.finalprojecttuwaiq.Model.Project;
+import org.example.finalprojecttuwaiq.Model.Stakeholder;
 import org.example.finalprojecttuwaiq.Model.User;
 import org.example.finalprojecttuwaiq.Repository.BARepository;
 import org.example.finalprojecttuwaiq.Repository.ProjectRepository;
+import org.example.finalprojecttuwaiq.Repository.StakeholderRepository;
 import org.example.finalprojecttuwaiq.Repository.UserRepository;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,7 @@ public class ProjectService {
     private final BARepository baRepository;
     private final OpenAiChatModel ai;
     private final ObjectMapper objectMapper;
-
+    private final StakeholderRepository stakeholderRepository;
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
@@ -49,6 +51,32 @@ public class ProjectService {
         businessAnalyst.getProjects().add(project);
         projectRepository.save(project);
         baRepository.save(businessAnalyst);
+    }
+    public void addStakeholderToProject(Integer stakeholder_id,Integer project_id){
+        Stakeholder stakeholder = stakeholderRepository.findStakeholderById(stakeholder_id);
+        if (stakeholder == null)
+            throw new ApiException("Stakeholder Not Found");
+        Project project = projectRepository.findProjectById(project_id);
+        if (project == null)
+            throw new ApiException("Project Not Found");
+
+        project.getStakeholders().add(stakeholder);
+        stakeholder.getProjects().add(project);
+        projectRepository.save(project);
+        stakeholderRepository.save(stakeholder);
+    }
+    public void addBusinessAnalystToProject(Integer ba_id,Integer project_id){
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA Not Found");
+        Project project = projectRepository.findProjectById(project_id);
+        if (project == null)
+            throw new ApiException("Project Not Found");
+
+        project.getBas().add(ba);
+        ba.getProjects().add(project);
+        projectRepository.save(project);
+        baRepository.save(ba);
     }
 
     public void updateProject(Integer id, ProjectRequestDTO projectRequestDTO) {

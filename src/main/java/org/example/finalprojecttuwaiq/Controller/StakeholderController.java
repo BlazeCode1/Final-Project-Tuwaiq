@@ -19,23 +19,23 @@ public class StakeholderController {
     private final StakeholderService stakeholderService;
 
     @GetMapping("/get")
-    public ResponseEntity<List<Stakeholder>> getAllStakeholders() {
+    public ResponseEntity<?> getAllStakeholders() {
         return ResponseEntity.ok(stakeholderService.getAllStakeholders());
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Stakeholder> getStakeholderById(@PathVariable Integer id) {
+    public ResponseEntity<?> getStakeholderById(@PathVariable Integer id) {
         return ResponseEntity.ok(stakeholderService.getStakeholderById(id));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addStakeholder(@Valid @RequestBody StakeholderRequestDTO stakeholderRequestDTO) {
+    public ResponseEntity<?> addStakeholder(@Valid @RequestBody StakeholderRequestDTO stakeholderRequestDTO) {
         stakeholderService.addStakeholder(stakeholderRequestDTO);
         return ResponseEntity.status(201).body(new ApiResponse("Stakeholder added successfully"));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse> updateStakeholder(@PathVariable Integer id, @Valid @RequestBody StakeholderRequestDTO stakeholderRequestDTO) {
+    public ResponseEntity<?> updateStakeholder(@PathVariable Integer id, @Valid @RequestBody StakeholderRequestDTO stakeholderRequestDTO) {
         stakeholderService.updateStakeholder(id, stakeholderRequestDTO);
         return ResponseEntity.ok(new ApiResponse("Stakeholder updated successfully"));
     }

@@ -50,4 +50,15 @@ public class ProjectController {
     public ResponseEntity<?> benchmark(@PathVariable Integer projectId) {
         return ResponseEntity.ok(projectService.marketBenchmarkPreview(projectId));
     }
+
+    @PostMapping("/assign/stakeholder/{stakeholder_id}/{project_id}")
+    public ResponseEntity<?> addStakeholderToProject(@PathVariable Integer stakeholder_id,@PathVariable Integer project_id){
+        projectService.addStakeholderToProject(stakeholder_id,project_id);
+        return ResponseEntity.ok(new ApiResponse("Assigned Stakeholder To Project"));
+    }
+    @PostMapping("/assign/ba/{ba_id}/{project_id}")
+    public ResponseEntity<?> addBusinessAnalystToProject(@PathVariable Integer ba_id,@PathVariable Integer project_id){
+        projectService.addBusinessAnalystToProject(ba_id,project_id);
+        return ResponseEntity.ok(new ApiResponse("Assigned Stakeholder To Project"));
+    }
 }
