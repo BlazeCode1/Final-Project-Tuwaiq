@@ -21,7 +21,7 @@ public class UserStoryRequestDTO {
     @Size(max = 255, message = "'So that' field cannot exceed 255 characters")
     private String soThat;
 
-    @Pattern(regexp = "^(Must|Should|Could|Wont|High|Medium|Low)$", message = "Priority must be one of Must, Should, Could, Wont, High, Medium, Low")
+    @Pattern(regexp = "^(Must|Should|Could|Wont)$", message = "Priority must be one of Must, Should, Could, Wont, High, Medium, Low")
     private String priority;
 
     @NotEmpty(message = "Acceptance criteria cannot be blank")
