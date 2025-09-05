@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StakeholderRequestDTO {
+public class  StakeholderRequestDTO {
     @NotEmpty(message = "Name cannot be blank")
     @Size(max = 100, message = "Name cannot exceed 100 characters")
     private String name;
