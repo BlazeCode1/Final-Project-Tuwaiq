@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class PaymentService {
 
-    @Value("${MOYASAR_API_KEY}")
+    @Value("${moyasar.api.key}")
     private String apiKey;
 
     private static final String MOYASAR_API_URL = "https://api.moyasar.com/v1/payments";
