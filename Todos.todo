@@ -1,3 +1,6 @@
+# All
+TODO JsonIgnore in all models
+
 # Diagrams
 TODO Generating diagrams using AI for mermaid {Still}
 
@@ -6,12 +9,18 @@ TODO saving documents in the DB {DONE}
 TODO document fix String type {DONE}
 TODO Create S3 Buckets to save each pdf file with a link {DONE}
 TODO FRD, BRD prompts fix {DONE}
+TODO Approval for documents {DONE |ALI}
+
+#UserStory
+TODO Generate User Stories from all requirements
 
 #Project
-TODO Project, approval status {Still}
-TODO generating push project info to Jira {Still}
+TODO Project, approval status {DONE}
 TODO check for subscription status in each and every end-point related to BA workflow
-
+TODO Make BA Invites Stakeholders and Bas into the project {still}
+TODO Accept Invitation {still}
+TODO generating push project info to Jira {Still}
+TODO Get Projects By Ba | Stakeholder
 #Abdullah
 TODO Test Whatsapp API
 TODO Integrate SMS API

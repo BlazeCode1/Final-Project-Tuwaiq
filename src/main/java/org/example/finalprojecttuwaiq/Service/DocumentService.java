@@ -122,6 +122,10 @@ public class DocumentService {
         document.setProject(project);
         document.setCreatedAt(LocalDateTime.now());
         document.setContentURI(bucket + fileName);
+
+        project.setStatus("Documentation");
+
+        projectRepository.save(project);
         documentRepository.save(document);
     }
 
@@ -218,7 +222,12 @@ public class DocumentService {
         document.setProject(project);
         document.setCreatedAt(LocalDateTime.now());
         document.setContentURI(bucket + fileName);
+
+        project.setStatus("Documentation");
+
+        projectRepository.save(project);
         documentRepository.save(document);
+
     }
 
 }
