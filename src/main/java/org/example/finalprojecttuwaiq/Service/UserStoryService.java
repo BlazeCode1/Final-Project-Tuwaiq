@@ -8,6 +8,7 @@ import org.example.finalprojecttuwaiq.Api.ApiException;
 import org.example.finalprojecttuwaiq.DTO.UserStoryRequestDTO;
 import org.example.finalprojecttuwaiq.Model.*;
 import org.example.finalprojecttuwaiq.Repository.DraftUserStoryRepository;
+import org.example.finalprojecttuwaiq.Repository.ProjectRepository;
 import org.example.finalprojecttuwaiq.Repository.RequirementRepository;
 import org.example.finalprojecttuwaiq.Repository.UserStoryRepository;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -25,6 +26,7 @@ public class UserStoryService {
     private final ObjectMapper objectMapper;
     private final UserStoryMapper mapper;
     private final OpenAiChatModel ai;
+    private final ProjectRepository projectRepository;
 
     public List<UserStory> getAllUserStories() {
         return userStoryRepository.findAll();
@@ -77,6 +79,53 @@ public class UserStoryService {
             draftUserStoryRepository.save(draftUserStory);
         } catch (JsonProcessingException e) {
             throw new ApiException("Failed To Parse Json :" + e.getMessage());
+        }
+    }
+
+    public void extractUserStoriesForProject(Integer projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ApiException("Project with id " + projectId + " not found"));
+
+        if (project.getRequirements() == null || project.getRequirements().isEmpty())
+            throw new ApiException("No requirements found for project " + projectId);
+
+        for (Requirement req : project.getRequirements()) {
+            try {
+                String requirementJson = objectMapper.writeValueAsString(req);
+
+                String prompt = """
+                        You are a Business Analyst AI assistant.
+                        
+                        Task:
+                        - Convert the following requirement object into one or more user stories.
+                        - Use all available fields from the requirement (title, description, type, priority, status, source, rationale, projectId).
+                        - Output ONLY a valid JSON array.
+                        - The first character of the output MUST be '[' and the last character MUST be ']'.
+                        - Do NOT include markdown, code fences, comments, explanations, or any text outside the JSON array.
+                        - Do Not Write ```json in front of the text, Write them as Json Objects directly
+                        Each JSON object must map exactly to this DTO:
+                        {
+                          "asA": "...",
+                          "iwant": "...",
+                          "soThat": "...",
+                          "priority": "Must|Should|Could|Wont|High|Medium|Low",
+                          "acceptanceCriteria": "...",
+                          "status": "Draft|Ready|InProgress|Done|Blocked",
+                          "requirementId": %d
+                        }
+                        
+                        Requirement Object:
+                        %s
+                        """.formatted(req.getId(), requirementJson);
+
+                String aiResult = ai.call(prompt);
+
+                DraftUserStory draft = new DraftUserStory(null, req.getId(), aiResult);
+                draftUserStoryRepository.save(draft);
+
+            } catch (JsonProcessingException e) {
+                throw new ApiException("Failed To Parse Json for requirement " + req.getId() + " : " + e.getMessage());
+            }
         }
     }
 
