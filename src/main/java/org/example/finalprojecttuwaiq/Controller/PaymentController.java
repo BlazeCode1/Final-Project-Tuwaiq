@@ -58,7 +58,7 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.getSubscriptionStatus(baID));
     }
 
-    @PostMapping("/subscription/cancel/{baID}")
+    @PutMapping("/subscription/cancel/{baID}")
     public ResponseEntity<?> cancelSubscription(@PathVariable Integer baID){
         paymentService.cancelSubscription(baID);
         return ResponseEntity.ok(new ApiResponse("subscription canceled successfully"));
