@@ -12,7 +12,7 @@ import org.example.finalprojecttuwaiq.DTO.StakeholderRequestDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/stakeholders")
+@RequestMapping("/api/v1/stakeholder")
 @RequiredArgsConstructor
 public class StakeholderController {
 
@@ -44,5 +44,10 @@ public class StakeholderController {
     public ResponseEntity<ApiResponse> deleteStakeholder(@PathVariable Integer id) {
         stakeholderService.deleteStakeholder(id);
         return ResponseEntity.ok(new ApiResponse("Stakeholder deleted successfully"));
+    }
+
+    @GetMapping("/projects/{stakeholder_id}")
+    public ResponseEntity<?> getProjectsByStakeholderId(@PathVariable Integer stakeholder_id){
+        return ResponseEntity.ok(stakeholderService.getProjectsByStakeholderId(stakeholder_id));
     }
 }

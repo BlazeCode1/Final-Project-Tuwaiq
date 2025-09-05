@@ -46,5 +46,8 @@ public class BAController {
         return ResponseEntity.ok(new ApiResponse("BA deleted successfully"));
     }
 
-    //TODO: ADD STAKEHOLDER TO PROJECT and assign document
+    @GetMapping("/projects/{ba_id}")
+    public ResponseEntity<?> getProjectsByBusinessAnalystId(@PathVariable Integer ba_id){
+        return ResponseEntity.ok(baService.findProjectsByBaId(ba_id));
+    }
 }
