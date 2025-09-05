@@ -20,10 +20,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class BA {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

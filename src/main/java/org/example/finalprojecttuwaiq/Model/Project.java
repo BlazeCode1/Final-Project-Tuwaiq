@@ -19,7 +19,6 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,9 +45,11 @@ public class Project {
     private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "projects")
+    @JsonIgnore
     private Set<BA> bas = new HashSet<>();
 
     @ManyToMany(mappedBy = "projects")
+    @JsonIgnore
     private Set<Stakeholder> stakeholders;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)

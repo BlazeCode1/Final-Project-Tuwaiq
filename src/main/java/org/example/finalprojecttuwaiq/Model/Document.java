@@ -1,5 +1,6 @@
 package org.example.finalprojecttuwaiq.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -35,6 +36,7 @@ public class Document {
 
     @ManyToOne
     @JoinColumn(name = "project_id")
+    @JsonIgnore
     private Project project;
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)

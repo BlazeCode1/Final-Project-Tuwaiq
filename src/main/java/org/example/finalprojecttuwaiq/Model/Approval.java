@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Approval {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,15 +38,18 @@ public class Approval {
     @NotNull(message = "Business analyst cannot be null")
     @ManyToOne
     @JoinColumn(name = "ba_id")
+    @JsonIgnore
     private BA ba;
 
     @NotNull(message = "Stakeholder cannot be null")
     @ManyToOne
     @JoinColumn(name = "stakeholder_id")
+    @JsonIgnore
     private Stakeholder stakeholder;
 
     @NotNull(message = "Document cannot be null")
     @ManyToOne
     @JoinColumn(name = "document_id")
+    @JsonIgnore
     private Document document;
 }
