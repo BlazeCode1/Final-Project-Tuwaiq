@@ -27,8 +27,6 @@ public class Approval {
     @Pattern(regexp = "^(PENDING|APPROVED|REJECTED)$", message = "Status must be one of PENDING, APPROVED, REJECTED")
     private String status;
 
-
-
     @Lob
     @Size(max = 2000, message = "Comments cannot exceed 2000 characters")
     private String comments;
