@@ -1,6 +1,8 @@
 # All
-TODO JsonIgnore in all models
-
+TODO JsonIgnore in all models {FIX}
+TODO Add Security Layer, jwtService JwtAuthenticationFilter{Still}
+TODO register Endpoint for each role {Still}
+TODO @AuthenticationPrinciple to hasAuth endpoints
 # Diagrams
 TODO Generating diagrams using AI for mermaid {Still}
 
@@ -20,7 +22,7 @@ TODO check for subscription status in each and every end-point related to BA wor
 TODO Make BA Invites Stakeholders and Bas into the project {DONE}
 TODO generating push project info to Jira {Still}
 TODO Get Projects By Ba | Stakeholder {DONE}
-TODO Project overview is set from the AI {STILL}
+
 #Abdullah
 TODO Test Whatsapp API
 TODO Integrate SMS API
