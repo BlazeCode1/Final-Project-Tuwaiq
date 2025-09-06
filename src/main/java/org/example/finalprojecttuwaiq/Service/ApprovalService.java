@@ -39,6 +39,8 @@ public class ApprovalService {
     public List<Approval> getPendingApprovalsByStakeholderId(Integer stakeholder_id){
         Stakeholder stakeholder = stakeholderRepository.findById(stakeholder_id)
                 .orElseThrow(() -> new ApiException("StakeHolder Not Found"));
+        if (!stakeholder.getUser().getRole().equalsIgnoreCase("Stakeholder"))
+            throw new ApiException("Unauthorized");
         return approvalRepository.getApprovalsByStakeholderAndStatus(stakeholder,"PENDING");
     }
 
@@ -52,7 +54,8 @@ public class ApprovalService {
                 .orElseThrow(() -> new ApiException("Stakeholder with ID " + approvalRequestDTO.getStakeholderId() + " not found"));
         Document document = documentRepository.findById(approvalRequestDTO.getDocumentId())
                 .orElseThrow(() -> new ApiException("Document with ID " + approvalRequestDTO.getDocumentId() + " not found"));
-
+        if (!ba.getUser().getRole().equalsIgnoreCase("BA"))
+            throw new ApiException("Unauthorized");
         Approval approval = new Approval();
         approval.setStatus("PENDING");
         approval.setBa(ba);
@@ -64,13 +67,13 @@ public class ApprovalService {
         mailService.sendApprovalRequestEmail(stakeholder,document,ba);
     }
 
-    public void acceptApproval(ApprovalResponseDTO approvalResponseDTO){
+    public void acceptApproval(Integer stakeholder_id,ApprovalResponseDTO approvalResponseDTO){
         Approval approval = approvalRepository.findById(approvalResponseDTO.getApprovalId())
                 .orElseThrow(() -> new ApiException("Approval with ID "+approvalResponseDTO.getApprovalId()+" not found"));
 
 
-        Stakeholder stakeholder = stakeholderRepository.findById(approvalResponseDTO.getStakeholderId())
-                .orElseThrow(()-> new ApiException("Approval with ID "+approvalResponseDTO.getStakeholderId()+" not found"));
+        Stakeholder stakeholder = stakeholderRepository.findById(stakeholder_id)
+                .orElseThrow(()-> new ApiException("Approval with ID "+stakeholder_id+" not found"));
 
         if (!Objects.equals(approval.getStakeholder().getId(), stakeholder.getId())){
             throw new ApiException("This stakeholder is not authorized to approve this request.");
@@ -86,15 +89,15 @@ public class ApprovalService {
         approval.setComments(approvalResponseDTO.getComment());
         approval.getDocument().getProject().setStatus("Validation");
         approvalRepository.save(approval);
-        mailService.sendApprovedEmail(ba,approval.getDocument(),stakeholder);
+        mailService.sendApprovedEmail(ba,approval.getDocument(),stakeholder, approval.getComments());
     }
 
-    public void rejectApproval(ApprovalResponseDTO approvalResponseDTO){
+    public void rejectApproval(Integer stakeholder_id,ApprovalResponseDTO approvalResponseDTO){
         Approval approval = approvalRepository.findById(approvalResponseDTO.getApprovalId())
                 .orElseThrow(() -> new ApiException("Approval with ID "+approvalResponseDTO.getApprovalId()+" not found"));
 
-        Stakeholder stakeholder = stakeholderRepository.findById(approvalResponseDTO.getStakeholderId())
-                .orElseThrow(()-> new ApiException("Approval with ID "+approvalResponseDTO.getStakeholderId()+" not found"));
+        Stakeholder stakeholder = stakeholderRepository.findById(stakeholder_id)
+                .orElseThrow(()-> new ApiException("Approval with ID "+stakeholder_id+" not found"));
 
         if (!Objects.equals(approval.getStakeholder().getId(), stakeholder.getId())){
             throw new ApiException("This stakeholder is not authorized to approve this request.");
@@ -110,7 +113,7 @@ public class ApprovalService {
         approval.setBa(ba);
         approval.setComments(approvalResponseDTO.getComment());
         approvalRepository.save(approval);
-        mailService.sendApprovedEmail(ba,approval.getDocument(),stakeholder);
+        mailService.sendRejectedEmail(ba,approval.getDocument(),stakeholder, approval.getComments());
     }
 
     public void updateApproval(Integer id, ApprovalRequestDTO approvalRequestDTO) {

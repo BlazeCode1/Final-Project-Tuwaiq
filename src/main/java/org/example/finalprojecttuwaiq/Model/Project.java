@@ -45,7 +45,7 @@ public class Project {
     private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "projects")
-    private Set<BA> bas = new HashSet<>();
+    private Set<BA> bas;
 
     @ManyToMany(mappedBy = "projects")
     private Set<Stakeholder> stakeholders;

@@ -4,8 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiResponse;
 import org.example.finalprojecttuwaiq.DTO.BARequestDTO;
+import org.example.finalprojecttuwaiq.Model.User;
 import org.example.finalprojecttuwaiq.Service.BAService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +16,16 @@ import org.springframework.web.bind.annotation.*;
 public class BAController {
 
     private final BAService baService;
+    @PostMapping("/register")
+    public ResponseEntity<?> registerBa(@Valid @RequestBody BARequestDTO baRequestDTO) {
+        baService.registerBa(baRequestDTO);
+        return ResponseEntity.status(201).body(new ApiResponse("BA Registered successfully"));
+    }
+    @GetMapping("/projects")
+    public ResponseEntity<?> getProjectsByBusinessAnalystId(@AuthenticationPrincipal User user){
+        return ResponseEntity.ok(baService.findProjectsByBaId(user.getId()));
+    }
+
 
     @GetMapping("/get")
     public ResponseEntity<?> getAllBAs() {
@@ -25,11 +37,7 @@ public class BAController {
         return ResponseEntity.ok(baService.getBAById(id));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerBa(@Valid @RequestBody BARequestDTO baRequestDTO) {
-        baService.registerBa(baRequestDTO);
-        return ResponseEntity.status(201).body(new ApiResponse("BA Registered successfully"));
-    }
+
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateBA(@PathVariable Integer id, @Valid @RequestBody BARequestDTO baRequestDTO) {
@@ -43,8 +51,4 @@ public class BAController {
         return ResponseEntity.ok(new ApiResponse("BA deleted successfully"));
     }
 
-    @GetMapping("/projects/{ba_id}")
-    public ResponseEntity<?> getProjectsByBusinessAnalystId(@PathVariable Integer ba_id){
-        return ResponseEntity.ok(baService.findProjectsByBaId(ba_id));
-    }
 }

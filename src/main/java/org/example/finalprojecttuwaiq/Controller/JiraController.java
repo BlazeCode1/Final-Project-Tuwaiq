@@ -8,16 +8,16 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/jira")
+@RequestMapping("/api/v1/jira")
 public class JiraController {
     private final JiraService jiraService;
 
-    @PostMapping("/create-from-userstory/{userStoryId}")
+    @PostMapping("/issue-from-userstory/{userStoryId}")
     public Map<String, Object> createFromUserStory(@PathVariable Integer userStoryId) {
         return jiraService.createIssueFromUserStoryId(userStoryId, "BAC");
     }
 
-    @PostMapping("/create-from-project/{projectId}")
+    @PostMapping("/issue-from-project/{projectId}")
     public Map<String, Object> createFromProject(@PathVariable Integer projectId) {
         return jiraService.createIssuesForProject(projectId, "BAC");
     }

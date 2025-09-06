@@ -4,8 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiResponse;
 import org.example.finalprojecttuwaiq.DTO.PaymentRequestDTO;
+import org.example.finalprojecttuwaiq.Model.User;
 import org.example.finalprojecttuwaiq.Service.PaymentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,14 +21,14 @@ public class PaymentController {
     return ResponseEntity.ok(paymentService.getPaymentStatus(paymentId));
     }
 
-    @PostMapping("/monthly/{baID}")
-    public ResponseEntity<?> processPaymentMonthly(@PathVariable Integer baID, @RequestBody @Valid PaymentRequestDTO paymentRequestDTO){
+    @PostMapping("/monthly")
+    public ResponseEntity<?> processPaymentMonthly(@AuthenticationPrincipal User user, @RequestBody @Valid PaymentRequestDTO paymentRequestDTO){
 
-        return ResponseEntity.ok(paymentService.processPaymentMonthly(baID, paymentRequestDTO));
+        return ResponseEntity.ok(paymentService.processPaymentMonthly(user.getId(), paymentRequestDTO));
     }
-    @PostMapping("/yearly/{baID}")
-    public ResponseEntity<?> processPaymentYearly(@PathVariable Integer baID, @RequestBody @Valid PaymentRequestDTO paymentRequestDTO){
-        return ResponseEntity.ok(paymentService.processPaymentYearly(baID, paymentRequestDTO));
+    @PostMapping("/yearly")
+    public ResponseEntity<?> processPaymentYearly( @AuthenticationPrincipal User user, @RequestBody @Valid PaymentRequestDTO paymentRequestDTO){
+        return ResponseEntity.ok(paymentService.processPaymentYearly(user.getId(), paymentRequestDTO));
     }
 
     @GetMapping("/callback/yearly/{baID}")
@@ -53,14 +55,14 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.subScribeMonthly(baID, transaction_id, status, message));
     }
 
-    @GetMapping("/subscription/status/{baID}")
-    public ResponseEntity<?> getSubscriptionStatus(@PathVariable Integer baID){
-        return ResponseEntity.ok(paymentService.getSubscriptionStatus(baID));
+    @GetMapping("/subscription/status")
+    public ResponseEntity<?> getSubscriptionStatus(@AuthenticationPrincipal User user){
+        return ResponseEntity.ok(paymentService.getSubscriptionStatus(user.getId()));
     }
 
-    @PutMapping("/subscription/cancel/{baID}")
-    public ResponseEntity<?> cancelSubscription(@PathVariable Integer baID){
-        paymentService.cancelSubscription(baID);
+    @PutMapping("/subscription/cancel")
+    public ResponseEntity<?> cancelSubscription(@AuthenticationPrincipal User user){
+        paymentService.cancelSubscription(user.getId());
         return ResponseEntity.ok(new ApiResponse("subscription canceled successfully"));
     }
 }

@@ -13,8 +13,5 @@ public class ApprovalResponseDTO {
     @NotNull(message = "Approval ID cannot be null")
    private Integer approvalId;
 
-    @NotNull(message = "Stakeholder ID cannot be null")
-   private Integer stakeholderId;
-
    private String comment;
 }

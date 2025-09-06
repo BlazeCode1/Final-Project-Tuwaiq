@@ -12,6 +12,7 @@ TODO document fix String type {DONE}
 TODO Create S3 Buckets to save each pdf file with a link {DONE}
 TODO FRD, BRD prompts fix {DONE}
 TODO Approval for documents {DONE |ALI}
+TODO Document View From Bucket Authorization | S3 {Still}
 
 #UserStory
 TODO Generate User Stories from all requirements

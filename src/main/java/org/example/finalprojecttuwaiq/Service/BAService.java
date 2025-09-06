@@ -70,6 +70,11 @@ public class BAService {
     }
 
     public List<Project> findProjectsByBaId(Integer ba_id){
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA not found");
+        if (!ba.getUser().getRole().equalsIgnoreCase("BA"))
+            throw new ApiException("Unauthorized");
         return baRepository.findProjectsByBaID(ba_id);
     }
 }

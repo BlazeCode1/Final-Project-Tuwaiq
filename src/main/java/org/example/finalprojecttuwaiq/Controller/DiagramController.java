@@ -16,22 +16,6 @@ public class DiagramController {
 
     private final DiagramService diagramService;
 
-    @GetMapping("/get")
-    public ResponseEntity<List<Diagram>> getAllDiagrams() {
-        return ResponseEntity.ok(diagramService.getAllDiagrams());
-    }
-
-    @GetMapping("/get/{id}")
-    public ResponseEntity<Diagram> getDiagramById(@PathVariable Integer id) {
-        return ResponseEntity.ok(diagramService.getDiagramById(id));
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse> deleteDiagram(@PathVariable Integer id) {
-        diagramService.deleteDiagram(id);
-        return ResponseEntity.ok(new ApiResponse("Diagram deleted successfully"));
-    }
-
     @PostMapping("/generate/class")
     public ResponseEntity<?> generateClassDiagram(Integer project_id){
         diagramService.generateClassDiagram(project_id);
@@ -47,6 +31,24 @@ public class DiagramController {
         diagramService.generateErDiagram(project_id);
         return ResponseEntity.ok(new ApiResponse("Class diagram generated"));
     }
+
+    @GetMapping("/get")
+    public ResponseEntity<List<Diagram>> getAllDiagrams() {
+        return ResponseEntity.ok(diagramService.getAllDiagrams());
+    }
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Diagram> getDiagramById(@PathVariable Integer id) {
+        return ResponseEntity.ok(diagramService.getDiagramById(id));
+    }
+
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ApiResponse> deleteDiagram(@PathVariable Integer id) {
+        diagramService.deleteDiagram(id);
+        return ResponseEntity.ok(new ApiResponse("Diagram deleted successfully"));
+    }
+
+
 
 
 

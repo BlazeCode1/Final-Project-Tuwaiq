@@ -40,35 +40,33 @@ public class ConfigSecurity {
 
 //               //Business Analyst ROUTES
                .requestMatchers("/api/v1/ba/register").permitAll()
-//               .requestMatchers("/api/v1/employee/update/{employee_id}").hasAnyAuthority("ADMIN","EMPLOYEE")
-//               .requestMatchers("/api/v1/employee/delete/{employee_id}").hasAnyAuthority("ADMIN","EMPLOYEE")
+               .requestMatchers("/api/v1/ba/projects").hasAuthority("BA")
 //
 //
 //                //Stakeholder Routes
-               .requestMatchers("/api/v1/customer/register").permitAll()
-//               .requestMatchers("/api/v1/customer/get").hasAuthority("ADMIN")
-//               .requestMatchers("/api/v1/customer/delete/{customer_id}").hasAnyAuthority("CUSTOMER","ADMIN","EMPLOYEE")
-//               .requestMatchers("/api/v1/customer/update/{customer_id}").hasAnyAuthority("CUSTOMER","ADMIN","EMPLOYEE")
+               .requestMatchers("/api/v1/stakeholder/register").permitAll()
 //
 //
-//               //ACCOUNT ROUTES
-//               .requestMatchers("/api/v1/account/get").hasAuthority("ADMIN")
-//               .requestMatchers("/api/v1/account/create").hasAuthority("CUSTOMER")
-//               .requestMatchers("/api/v1/account/my-accounts").hasAuthority("CUSTOMER")
-//               .requestMatchers("/api/v1/account/update/{account_id}").hasAnyAuthority("CUSTOMER","ADMIN")
-//               .requestMatchers("/api/v1/account/delete/{account_id}").hasAnyAuthority("CUSTOMER","ADMIN")
-//               .requestMatchers("/api/v1/account/{account_id}/activate").hasAnyAuthority("ADMIN","EMPLOYEE")
-//               .requestMatchers("/api/v1/account/{account_id}").hasAuthority("CUSTOMER")
-//               .requestMatchers("/api/v1/account/{account_id}/deposit/{amount}").hasAuthority("CUSTOMER")
-//               .requestMatchers("/api/v1/account/{account_id}/withdraw/{amount}").hasAuthority("CUSTOMER")
-//               .requestMatchers("/api/v1/account/transfer/{from_account_id}/{to_account_id}/{amount}").hasAuthority("CUSTOMER")
-//               .requestMatchers("/api/v1/account/block/{account_id}").hasAnyAuthority("ADMIN","EMPLOYEE")
+//               //Approval ROUTES
+               .requestMatchers("/api/v1/approvals/approve").hasAuthority("STAKEHOLDER")
+               .requestMatchers("api/v1/approvals/pending").hasAuthority("STAKEHOLDER")
+               .requestMatchers("/api/v1/approvals/reject").hasAuthority("STAKEHOLDER")
+               .requestMatchers("/api/v1/approvals/send").hasAuthority("BA")
 //
-//
-//               //ADMIN ROUTES
+//               //Document ROUTES
+               .requestMatchers("/api/v1/documents/generate/frd/{project_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/documents/generate/brd/{project_id}").hasAuthority("BA")
 //               .requestMatchers("/api/v1/auth/register").hasAuthority("ADMIN")
 //               .requestMatchers("/api/v1/auth/get/users").hasAuthority("ADMIN")
-
+               //Payment ROUTES
+               .requestMatchers("/api/v1/payment/monthly").hasAuthority("BA")
+               .requestMatchers("/api/v1/payment/yearly").hasAuthority("BA")
+               .requestMatchers("/api/v1/payment/subscription/status").hasAuthority("BA")
+               .requestMatchers("/api/v1/payment/subscription/cancel").hasAuthority("BA")
+               .requestMatchers("/api/v1/payment/callback/**").permitAll()
+               // Jira ROUTES
+               .requestMatchers("/api/v1/jira/issue-from-userstory/{userStoryId}").hasAuthority("BA")
+               .requestMatchers("/api/v1/jira/issue-from-project/{project_id}").hasAuthority("BA")
 
                //Login
                .requestMatchers("/api/v1/auth/login").permitAll()

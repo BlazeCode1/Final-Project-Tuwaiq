@@ -3,6 +3,7 @@ package org.example.finalprojecttuwaiq.Service;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiException;
 import org.example.finalprojecttuwaiq.Model.*;
+import org.example.finalprojecttuwaiq.Repository.BARepository;
 import org.example.finalprojecttuwaiq.Repository.DocumentRepository;
 import org.example.finalprojecttuwaiq.Repository.ProjectRepository;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -18,6 +19,7 @@ public class DocumentService {
 
     private final DocumentRepository documentRepository;
     private final ProjectRepository projectRepository;
+    private final BARepository baRepository;
     private final S3Service s3;
     private final OpenAiChatModel ai;
     private final PdfService pdf;
@@ -41,13 +43,17 @@ public class DocumentService {
     }
 
 
-    public void generateBRD(Integer project_id) throws IOException {
-
+    public void generateBRD(Integer ba_id,Integer project_id) throws IOException {
+        BA creator = baRepository.findBAById(ba_id);
+        if (creator == null)
+            throw new ApiException("BA Not Found");
 
         Project project = projectRepository.findProjectById(project_id);
         if (project == null)
             throw new ApiException("Project Not found");
 
+        if (!project.getBas().contains(creator))
+            throw new ApiException("Not Authorized");
 
         String fileName = "BRD-" + project.getName() + ".pdf";
 
@@ -130,10 +136,18 @@ public class DocumentService {
     }
 
 
-    public void generateFRD(Integer project_id) throws IOException {
+    public void generateFRD(Integer ba_id,Integer project_id) throws IOException {
+        BA creator = baRepository.findBAById(ba_id);
+        if (creator == null)
+            throw new ApiException("BA Not Found");
+
         Project project = projectRepository.findProjectById(project_id);
         if (project == null)
             throw new ApiException("Project Not found");
+
+
+        if (!project.getBas().contains(creator))
+            throw new ApiException("Not Authorized");
         String fileName = "FRD-" + project.getName() + ".pdf";
 
         StringBuilder prompt = new StringBuilder();

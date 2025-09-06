@@ -22,50 +22,50 @@ public class ApprovalController {
 
     private final ApprovalService approvalService;
 
+
+    @PostMapping("/send")
+    public ResponseEntity<?> sendApprovalRequest(@AuthenticationPrincipal User user, @RequestBody @Valid ApprovalRequestDTO approvalRequestDTO) {
+        approvalService.sendApproval(user.getId(), approvalRequestDTO);
+        return ResponseEntity.ok().body(new ApiResponse("Request Sent Successfully"));
+    }
+    @GetMapping("/pending")
+    public ResponseEntity<?> getPendingApprovalsByStakeholder(@AuthenticationPrincipal User user){
+        return ResponseEntity.ok(approvalService.getPendingApprovalsByStakeholderId(user.getId()));
+    }
+    @PostMapping("/approve")
+    public ResponseEntity<?> acceptApproval(@AuthenticationPrincipal User user,@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) {
+        approvalService.acceptApproval(user.getId(),approvalResponseDTO);
+        return ResponseEntity.ok().body(new ApiResponse("Document approved"));
+    }
+
+    @PostMapping("/reject")
+    public ResponseEntity<?> rejectApproval(@AuthenticationPrincipal User user,@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) {
+        approvalService.rejectApproval(user.getId(),approvalResponseDTO);
+        return ResponseEntity.ok().body(new ApiResponse("Document rejected"));
+    }
     @GetMapping("/get")
-    public ResponseEntity<List<Approval>> getAllApprovals() {
+    public ResponseEntity<?> getAllApprovals() {
         return ResponseEntity.ok(approvalService.getAllApprovals());
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Approval> getApprovalById(@PathVariable Integer id) {
+    public ResponseEntity<?> getApprovalById(@PathVariable Integer id) {
         return ResponseEntity.ok(approvalService.getApprovalById(id));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse> updateApproval(@PathVariable Integer id, @Valid @RequestBody ApprovalRequestDTO approvalRequestDTO) {
+    public ResponseEntity<?> updateApproval(@PathVariable Integer id, @Valid @RequestBody ApprovalRequestDTO approvalRequestDTO) {
         approvalService.updateApproval(id, approvalRequestDTO);
         return ResponseEntity.ok(new ApiResponse("Approval updated successfully"));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse> deleteApproval(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteApproval(@PathVariable Integer id) {
         approvalService.deleteApproval(id);
         return ResponseEntity.ok(new ApiResponse("Approval deleted successfully"));
     }
 
-    @PostMapping("/{baId}/send/")
-    public ResponseEntity<?> sendApprovalRequest(@PathVariable Integer baId, @RequestBody @Valid ApprovalRequestDTO approvalRequestDTO) {
-        approvalService.sendApproval(baId, approvalRequestDTO);
-        return ResponseEntity.ok().body(new ApiResponse("Request Sent Successfully"));
-    }
 
 
-    @PostMapping("/approve")
-    public ResponseEntity<?> acceptApproval(@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) {
-        approvalService.acceptApproval(approvalResponseDTO);
-        return ResponseEntity.ok().body(new ApiResponse("Document approved"));
-    }
 
-    @PostMapping("/reject")
-    public ResponseEntity<?> rejectApproval(@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) {
-        approvalService.rejectApproval(approvalResponseDTO);
-        return ResponseEntity.ok().body(new ApiResponse("Document rejected"));
-    }
-
-    @GetMapping("/pending/{stakeholder_id}")
-    public ResponseEntity<?> getPendingApprovalsByStakeholder(@PathVariable Integer stakeholder_id){
-        return ResponseEntity.ok(approvalService.getPendingApprovalsByStakeholderId(stakeholder_id));
-
-    }
 }

@@ -30,14 +30,15 @@ public class MailService {
         mailSender.send(mailMessage);
     }
 
-    public void sendApprovedEmail(BA requester, Document document, Stakeholder approver) {
+    public void sendApprovedEmail(BA requester, Document document, Stakeholder approver,String reason) {
         mailMessage.setFrom("alimuaffag@gmail.com");
         mailMessage.setTo(requester.getUser().getEmail());
         mailMessage.setSubject("Document Approved: " + document.getTitle());
         mailMessage.setText(
                 "Dear " + requester.getUser().getUsername() + ",\n\n" +
                         "Your document \"" + document.getTitle() + "\" has been approved by " +
-                        approver.getUser().getUsername() + ".\n\n" +
+                        approver.getUser().getUsername() + ".\n" +
+                        (reason != null && !reason.isBlank() ? ("Reason: " + reason + "\n\n") : "\n") +
                         "Best regards,\nDocument Management System"
         );
         mailSender.send(mailMessage);
