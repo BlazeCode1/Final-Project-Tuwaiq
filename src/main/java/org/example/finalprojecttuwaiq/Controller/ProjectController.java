@@ -61,4 +61,9 @@ public class ProjectController {
         projectService.addBusinessAnalystToProject(ba_id,project_id);
         return ResponseEntity.ok(new ApiResponse("Assigned Business Analyst To Project"));
     }
+
+    @PostMapping("/recommendTools/{projectId}")
+    public ResponseEntity<?> recommendTools(@PathVariable Integer projectId){
+        return ResponseEntity.ok().body(projectService.recommendTools(projectId));
+    }
 }
