@@ -30,11 +30,11 @@ public class JiraService {
     private final UserStoryRepository userStoryRepository;
     private final ProjectRepository projectRepository;
 
-    @Value("${jira.base-url}")
+    @Value("${jira.base.url}")
     private String base;
     @Value("${jira.email}")
     private String email;
-    @Value("${jira.api-token}")
+    @Value("${jira.api.token}")
     private String token;
 
     private HttpHeaders jsonHeaders() {
