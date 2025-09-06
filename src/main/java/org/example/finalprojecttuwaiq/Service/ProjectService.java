@@ -29,6 +29,7 @@ public class ProjectService {
     private final OpenAiChatModel ai;
     private final ObjectMapper objectMapper;
     private final StakeholderRepository stakeholderRepository;
+
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
