@@ -1,5 +1,6 @@
 package org.example.finalprojecttuwaiq.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -32,5 +33,6 @@ public class Diagram {
     @NotNull(message = "Project cannot be null")
     @ManyToOne
     @JoinColumn(name = "project_id")
+    @JsonIgnore
     private Project project;
 }

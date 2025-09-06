@@ -15,7 +15,6 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Stakeholder {
     @Id
     private Integer id;
@@ -40,6 +39,7 @@ public class Stakeholder {
         joinColumns = @JoinColumn(name = "stakeholder_id"),
         inverseJoinColumns = @JoinColumn(name = "project_id")
     )
+    @JsonIgnore
     private Set<Project> projects;
 
     @OneToMany(mappedBy = "stakeholder", cascade = CascadeType.ALL)

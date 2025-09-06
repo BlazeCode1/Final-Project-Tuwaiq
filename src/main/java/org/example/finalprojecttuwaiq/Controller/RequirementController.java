@@ -21,6 +21,12 @@ public class RequirementController {
         return ResponseEntity.ok(requirementService.getAllRequirements());
     }
 
+    @PostMapping("/add")
+    public ResponseEntity<?> addRequirement(@RequestBody @Valid RequirementRequestDTO requirementRequestDTO){
+        requirementService.addRequirement(requirementRequestDTO);
+        return ResponseEntity.ok(new ApiResponse("Requirement Added Successfully"));
+    }
+
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getRequirementById(@PathVariable Integer id) {
         return ResponseEntity.ok(requirementService.getRequirementById(id));

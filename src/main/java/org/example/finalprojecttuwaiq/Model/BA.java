@@ -20,7 +20,6 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class BA {
 
 
@@ -59,5 +58,6 @@ public class BA {
         joinColumns = @JoinColumn(name = "ba_id"),
         inverseJoinColumns = @JoinColumn(name = "project_id")
     )
+    @JsonIgnore
     private Set<Project> projects = new HashSet<>();
 }
