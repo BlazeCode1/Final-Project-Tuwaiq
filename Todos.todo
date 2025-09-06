@@ -29,3 +29,6 @@ TODO Test Whatsapp API
 TODO Integrate SMS API
 TODO fix figma
 TODO add exit endpoints to both Stakeholder and BA.
+TODO create exit project for business analysts and stake holders
+TODO create end point to reassign the owner of the project
+TODO Add whatsapp notification send to added or removed sh and bas
