@@ -2,6 +2,8 @@ package org.example.finalprojecttuwaiq.Service;
 
 import lombok.RequiredArgsConstructor;
 
+import org.example.finalprojecttuwaiq.Model.UserStory;
+import org.example.finalprojecttuwaiq.Repository.UserStoryRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +22,9 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class JiraService {
+
     private final RestTemplate rest;
+    private final UserStoryRepository userStoryRepository;
 
     @Value("${jira.base-url}")
     private String base;
@@ -135,6 +140,45 @@ public class JiraService {
         var doReq = new HttpEntity<>(body, jsonHeaders());
         rest.exchange(url, HttpMethod.POST, doReq, Void.class);
     }
+
+    public Map<String, Object> createIssueFromUserStoryId(Integer userStoryId, String jiraProjectKey) {
+        UserStory us = userStoryRepository.findById(userStoryId)
+                .orElseThrow(() -> new RuntimeException("UserStory " + userStoryId + " not found"));
+
+        String asA    = us.getAsA()    == null ? "" : us.getAsA().trim();
+        String iWant  = us.getIWant()  == null ? "" : us.getIWant().trim();   // انتبه لحرف W الكبير
+        String soThat = us.getSoThat() == null ? "" : us.getSoThat().trim();
+
+        String summary = ("As a " + asA + ", I want " + iWant +
+                (soThat.isBlank() ? "" : " so that " + soThat)).trim();
+        if (summary.length() > 240) summary = summary.substring(0, 240);
+
+        Map<String, Object> fields = new LinkedHashMap<>();
+        fields.put("project",   Map.of("key", jiraProjectKey));
+        fields.put("issuetype", Map.of("id", "10007")); // Task
+        fields.put("summary",   summary);
+
+        var req = new HttpEntity<>(Map.of("fields", fields), jsonHeaders());
+        var res = rest.exchange(
+                base + "/rest/api/3/issue",
+                HttpMethod.POST,
+                req,
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+        ).getBody();
+
+        String jiraKey = (String) res.get("key");
+        String self    = (String) res.get("self");
+
+        return Map.of(
+                "status", "created",
+                "userStoryId", userStoryId,
+                "jiraKey", jiraKey,
+                "browse", base + "/browse/" + jiraKey,
+                "self", self
+        );
+    }
+
+
 
 
 }
