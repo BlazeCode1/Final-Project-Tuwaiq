@@ -12,6 +12,9 @@ public class  StakeholderRequestDTO {
     @NotEmpty(message = "Name cannot be blank")
     @Size(max = 100, message = "Name cannot exceed 100 characters")
     private String name;
+    @NotEmpty(message = "Name cannot be blank")
+    @Size(max = 100, message = "Name cannot exceed 100 characters")
+    private String username;
 
     @Email(message = "Invalid email format")
     @NotEmpty(message = "Email cannot be blank")
@@ -21,7 +24,7 @@ public class  StakeholderRequestDTO {
     private String phone;
 
     @NotEmpty(message = "Password hash cannot be blank")
-    private String passwordHash;
+    private String password;
 
 
 

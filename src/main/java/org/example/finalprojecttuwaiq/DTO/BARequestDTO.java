@@ -9,9 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BARequestDTO {
-    @NotBlank(message = "Name cannot be blank")
+    @NotEmpty(message = "Name cannot be blank")
     @Size(max = 100, message = "Name cannot exceed 100 characters")
     private String name;
+    @NotBlank(message = "Name cannot be blank")
+    @Size(max = 100, message = "Name cannot exceed 100 characters")
+    private String username;
 
     @Email(message = "Invalid email format")
     @NotBlank(message = "Email cannot be blank")
@@ -21,7 +24,7 @@ public class BARequestDTO {
     private String phone;
 
     @NotBlank(message = "Password hash cannot be blank")
-    private String passwordHash;
+    private String password;
 
 
     @NotBlank(message = "Domain expertise cannot be blank")

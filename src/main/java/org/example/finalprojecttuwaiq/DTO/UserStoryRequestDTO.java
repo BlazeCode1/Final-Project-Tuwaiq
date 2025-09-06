@@ -27,8 +27,6 @@ public class UserStoryRequestDTO {
     @NotEmpty(message = "Acceptance criteria cannot be blank")
     private String acceptanceCriteria;
 
-    @Pattern(regexp = "^(Draft|Ready|InProgress|Done|Blocked)$", message = "Status must be one of Draft, Ready, InProgress, Done, Blocked")
-    private String status;
 
     @NotNull(message = "Requirement ID cannot be null")
     private Integer requirementId;

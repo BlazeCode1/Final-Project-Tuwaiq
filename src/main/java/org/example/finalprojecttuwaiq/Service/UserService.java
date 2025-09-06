@@ -5,6 +5,7 @@ import org.example.finalprojecttuwaiq.Api.ApiException;
 import org.example.finalprojecttuwaiq.DTO.UserRequestDTO;
 import org.example.finalprojecttuwaiq.Model.User;
 import org.example.finalprojecttuwaiq.Repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,12 +25,13 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new ApiException("User with id " + id + " not found"));
     }
 
-    public void addUser(UserRequestDTO userRequestDTO) {
+    public void registerAdmin(UserRequestDTO userRequestDTO) {
         User user = new User();
         user.setName(userRequestDTO.getName());
+        user.setUsername(userRequestDTO.getUsername());
         user.setEmail(userRequestDTO.getEmail());
         user.setPhone(userRequestDTO.getPhone());
-        user.setPasswordHash(userRequestDTO.getPasswordHash());
+        user.setPassword(new BCryptPasswordEncoder().encode(userRequestDTO.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
     }
@@ -39,7 +41,7 @@ public class UserService {
         existingUser.setName(userRequestDTO.getName());
         existingUser.setEmail(userRequestDTO.getEmail());
         existingUser.setPhone(userRequestDTO.getPhone());
-        existingUser.setPasswordHash(userRequestDTO.getPasswordHash());
+        existingUser.setPassword(userRequestDTO.getPassword());
         userRepository.save(existingUser);
     }
 

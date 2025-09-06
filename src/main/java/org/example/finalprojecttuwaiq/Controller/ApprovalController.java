@@ -6,8 +6,11 @@ import org.example.finalprojecttuwaiq.Api.ApiResponse;
 import org.example.finalprojecttuwaiq.DTO.ApprovalRequestDTO;
 import org.example.finalprojecttuwaiq.DTO.ApprovalResponseDTO;
 import org.example.finalprojecttuwaiq.Model.Approval;
+import org.example.finalprojecttuwaiq.Model.User;
 import org.example.finalprojecttuwaiq.Service.ApprovalService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +31,6 @@ public class ApprovalController {
     public ResponseEntity<Approval> getApprovalById(@PathVariable Integer id) {
         return ResponseEntity.ok(approvalService.getApprovalById(id));
     }
-
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse> updateApproval(@PathVariable Integer id, @Valid @RequestBody ApprovalRequestDTO approvalRequestDTO) {

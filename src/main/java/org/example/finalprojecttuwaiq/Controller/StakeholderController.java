@@ -28,10 +28,10 @@ public class StakeholderController {
         return ResponseEntity.ok(stakeholderService.getStakeholderById(id));
     }
 
-    @PostMapping("/add")
+    @PostMapping("/register")
     public ResponseEntity<?> addStakeholder(@Valid @RequestBody StakeholderRequestDTO stakeholderRequestDTO) {
-        stakeholderService.addStakeholder(stakeholderRequestDTO);
-        return ResponseEntity.status(201).body(new ApiResponse("Stakeholder added successfully"));
+        stakeholderService.registerStakeholder(stakeholderRequestDTO);
+        return ResponseEntity.status(201).body(new ApiResponse("Stakeholder Registered successfully"));
     }
 
     @PutMapping("/update/{id}")

@@ -30,7 +30,7 @@ public class UserController {
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
-        userService.addUser(userRequestDTO);
+        userService.registerAdmin(userRequestDTO);
         return ResponseEntity.status(201).body(new ApiResponse("User added successfully"));
     }
 
