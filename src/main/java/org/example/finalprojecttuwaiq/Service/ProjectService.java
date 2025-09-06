@@ -8,11 +8,9 @@ import org.example.finalprojecttuwaiq.DTO.ProjectRequestDTO;
 import org.example.finalprojecttuwaiq.Model.BA;
 import org.example.finalprojecttuwaiq.Model.Project;
 import org.example.finalprojecttuwaiq.Model.Stakeholder;
-import org.example.finalprojecttuwaiq.Model.User;
 import org.example.finalprojecttuwaiq.Repository.BARepository;
 import org.example.finalprojecttuwaiq.Repository.ProjectRepository;
 import org.example.finalprojecttuwaiq.Repository.StakeholderRepository;
-import org.example.finalprojecttuwaiq.Repository.UserRepository;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +43,7 @@ public class ProjectService {
         if (!businessAnalyst.getUser().getRole().equalsIgnoreCase("BA"))
             throw new ApiException("Must Be Business Analyst to add A project");
         Project project = new Project();
+        project.setOwner(ba_id);
         project.setName(projectRequestDTO.getName());
         project.setDescription(projectRequestDTO.getDescription());
         project.setStatus("Discovery");
@@ -54,50 +53,86 @@ public class ProjectService {
         projectRepository.save(project);
         baRepository.save(businessAnalyst);
     }
-    public void addStakeholderToProject(Integer stakeholder_id,Integer project_id){
+    public void addStakeholderToProject(Integer owner_id,Integer stakeholder_id,Integer project_id){
+        BA ba = baRepository.findBAById(owner_id);
+        if (ba == null)
+            throw new ApiException("BA Not Found");
+
         Stakeholder stakeholder = stakeholderRepository.findStakeholderById(stakeholder_id);
         if (stakeholder == null)
             throw new ApiException("Stakeholder Not Found");
         Project project = projectRepository.findProjectById(project_id);
         if (project == null)
             throw new ApiException("Project Not Found");
-
+        BA owner = baRepository.findBAById(project.getOwner());
+        if (!owner.equals(ba))
+            throw new ApiException("Unauthorized");
         project.getStakeholders().add(stakeholder);
         stakeholder.getProjects().add(project);
         projectRepository.save(project);
         stakeholderRepository.save(stakeholder);
     }
-    public void addBusinessAnalystToProject(Integer ba_id,Integer project_id){
+    public void addBusinessAnalystToProject(Integer ownerID,Integer ba_id,Integer project_id){
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA Not Found");
         Project project = projectRepository.findProjectById(project_id);
         if (project == null)
             throw new ApiException("Project Not Found");
+        BA requester = baRepository.findBAById(ownerID);
+        if (requester == null)
+            throw new ApiException("BA not found");
 
+        BA owner = baRepository.findBAById(project.getOwner());
+        if (!owner.equals(requester))
+            throw new ApiException("Unauthorized");
         project.getBas().add(ba);
         ba.getProjects().add(project);
         projectRepository.save(project);
         baRepository.save(ba);
     }
 
-    public void updateProject(Integer id, ProjectRequestDTO projectRequestDTO) {
+    public void updateProject(Integer ownerId,Integer id, ProjectRequestDTO projectRequestDTO) {
+        BA ba = baRepository.findBAById(ownerId);
+        if (ba == null)
+            throw new ApiException("BA not found");
+
         Project existingProject = projectRepository.findById(id).orElseThrow(() -> new ApiException("Project with id " + id + " not found"));
+        BA owner = baRepository.findBAById(existingProject.getOwner());
+        if (!owner.equals(ba))
+            throw new ApiException("Unauthorized");
+
         existingProject.setName(projectRequestDTO.getName());
         existingProject.setDescription(projectRequestDTO.getDescription());
         existingProject.setUpdatedAt(LocalDateTime.now());
         projectRepository.save(existingProject);
     }
 
-    public void deleteProject(Integer id) {
+    public void deleteProject(Integer requester_id,Integer id) {
         Project project = projectRepository.findById(id).orElseThrow(() -> new ApiException("Project with id " + id + " not found"));
+        BA requester = baRepository.findBAById(requester_id);
+        if (requester == null)
+            throw new ApiException("BA not found");
+        BA owner = baRepository.findBAById(project.getOwner());
+        if (!owner.equals(requester))
+            throw new ApiException("Not Authorized!");
+
+
+
         projectRepository.delete(project);
     }
 
-    public Map<String, Object> marketBenchmarkPreview(Integer projectId) {
+    public Map<String, Object> marketBenchmarkPreview(Integer ba_id,Integer projectId) {
+        BA baUser = baRepository.findBAById(ba_id);
+        if (baUser == null)
+            throw new ApiException("BA not found");
+
+
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ApiException("Project with id " + projectId + " not found"));
 
+        if (!project.getBas().contains(baUser)) // IF TRUE IT WILL GET OUT
+            throw new ApiException("Unauthorized");
 
         String prompt = """
                 You are a market analyst AI.
@@ -109,19 +144,19 @@ public class ProjectService {
                 - The first character MUST be '{' and the last character MUST be '}'.
                 
                 JSON SHAPE:
-                { 
-                  "project": { 
-                    "id": %d, 
-                    "name": "...", 
-                    "description": "..." 
-                  }, 
-                  "competitors": [ 
-                    { 
-                      "name": "...", 
-                      "website": "https://...", 
-                      "similarity": 0-100, 
-                      "reasoning": "...", 
-                      "key_features": ["..."], 
+                {
+                  "project": {
+                    "id": %d,
+                    "name": "...",
+                    "description": "..."
+                  },
+                  "competitors": [
+                    {
+                      "name": "...",
+                      "website": "https://...",
+                      "similarity": 0-100,
+                      "reasoning": "...",
+                      "key_features": ["..."],
                       "overlaps": ["..."], 
                       "gaps": ["..."], 
                       "price_tier": "LOW|MID|HIGH|null", 
@@ -149,17 +184,21 @@ public class ProjectService {
         String json = raw.substring(s, e + 1).trim();
 
         try {
-            return objectMapper.readValue(json, new com.fasterxml.jackson.core.type.TypeReference<Map<String, Object>>() {
+            return objectMapper.readValue(json, new com.fasterxml.jackson.core.type.TypeReference<>() {
             });
         } catch (Exception ex) {
             throw new ApiException("Invalid AI JSON");
         }
     }
 
-    public Map<String, Object> recommendTools(Integer projectId) {
+    public Map<String, Object> recommendTools(Integer requester_id,Integer projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ApiException("Project with id " + projectId + " not found"));
-
+        BA requester = baRepository.findBAById(requester_id);
+        if (requester == null)
+            throw new ApiException("BA Not Found");
+        if (!project.getBas().contains(requester))
+            throw new ApiException("Unauthorized");
         try {
             String projectJson = objectMapper.writeValueAsString(project);
 
@@ -192,7 +231,7 @@ public class ProjectService {
             """.formatted(projectJson);
 
             String raw = ai.call(prompt);
-            return objectMapper.readValue(raw, new TypeReference<Map<String, Object>>() {});
+            return objectMapper.readValue(raw, new TypeReference<>() {});
         } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
             throw new ApiException("Failed to parse JSON: " + e.getMessage());
         }

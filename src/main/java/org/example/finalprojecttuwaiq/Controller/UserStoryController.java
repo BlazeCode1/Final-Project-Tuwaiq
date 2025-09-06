@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiResponse;
 import org.example.finalprojecttuwaiq.DTO.UserStoryRequestDTO;
+import org.example.finalprojecttuwaiq.Model.User;
 import org.example.finalprojecttuwaiq.Model.UserStory;
 import org.example.finalprojecttuwaiq.Service.UserStoryService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,50 +31,51 @@ public class UserStoryController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addUserStory(@Valid @RequestBody UserStoryRequestDTO userStoryRequestDTO) {
-        userStoryService.addUserStory(userStoryRequestDTO);
+    public ResponseEntity<?> addUserStory(@AuthenticationPrincipal User user, @Valid @RequestBody UserStoryRequestDTO userStoryRequestDTO) {
+        userStoryService.addUserStory(user.getId(), userStoryRequestDTO);
         return ResponseEntity.status(201).body(new ApiResponse("UserStory added successfully"));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse> updateUserStory(@PathVariable Integer id, @Valid @RequestBody UserStoryRequestDTO userStoryRequestDTO) {
-        userStoryService.updateUserStory(id, userStoryRequestDTO);
+    public ResponseEntity<?> updateUserStory(@AuthenticationPrincipal User user,@PathVariable Integer id, @Valid @RequestBody UserStoryRequestDTO userStoryRequestDTO) {
+        userStoryService.updateUserStory(user.getId(), id, userStoryRequestDTO);
         return ResponseEntity.ok(new ApiResponse("UserStory updated successfully"));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse> deleteUserStory(@PathVariable Integer id) {
-        userStoryService.deleteUserStory(id);
+    public ResponseEntity<?> deleteUserStory(@AuthenticationPrincipal User user,@PathVariable Integer id) {
+        userStoryService.deleteUserStory(user.getId(),id);
         return ResponseEntity.ok(new ApiResponse("UserStory deleted successfully"));
     }
     @PostMapping("/generate/{requirement_id}")
-    public ResponseEntity<?> generateUserStories(@PathVariable Integer requirement_id){
-        userStoryService.extractUserStories(requirement_id);
+    public ResponseEntity<?> generateUserStories(@AuthenticationPrincipal User user,@PathVariable Integer requirement_id){
+        userStoryService.extractUserStoryByRequirement(user.getId(),requirement_id);
         return ResponseEntity.ok(new ApiResponse("User Stories Generated!"));
     }
 
     @GetMapping("/draft/requirement/{requirement_id}")
-    public ResponseEntity<?> getAllDraftUserStoriesWithRequirementId(@PathVariable Integer requirement_id){
-        return ResponseEntity.ok(userStoryService.getAllDraftsByRequirementId(requirement_id));
+    public ResponseEntity<?> getAllDraftUserStoriesWithRequirementId(@AuthenticationPrincipal User user,@PathVariable Integer requirement_id){
+        return ResponseEntity.ok(userStoryService.getAllDraftsByRequirementId(user.getId(), requirement_id));
     }
     @GetMapping("/draft/get/{draft_id}")
-    public ResponseEntity<?> getDraftById(@PathVariable Integer draft_id){
-        return ResponseEntity.ok(userStoryService.getDraftById(draft_id));
+    public ResponseEntity<?> getDraftById(@AuthenticationPrincipal User user,@PathVariable Integer draft_id){
+        return ResponseEntity.ok(userStoryService.getDraftById(user.getId(),draft_id));
     }
     @PostMapping("/draft/accept/{draft_id}")
-    public ResponseEntity<?> acceptDraft(@PathVariable Integer draft_id){
-        userStoryService.acceptDraft(draft_id);
+    public ResponseEntity<?> acceptDraft(@AuthenticationPrincipal User user,@PathVariable Integer draft_id){
+        userStoryService.acceptDraft(user.getId(), draft_id);
         return ResponseEntity.ok(new ApiResponse("Draft accepted!"));
     }
     @DeleteMapping("/draft/reject/{draft_id}")
-    public ResponseEntity<?> rejectDraft(@PathVariable Integer draft_id){
-        userStoryService.rejectDraft(draft_id);
+    public ResponseEntity<?> rejectDraft(@AuthenticationPrincipal User user,@PathVariable Integer draft_id){
+        userStoryService.rejectDraft(user.getId(),draft_id);
         return ResponseEntity.ok(new ApiResponse("Draft rejected!"));
     }
 
-    @PostMapping("/generate-by-project/{project_id}")
-    public ResponseEntity<?> generateUserStoriesForProject(@PathVariable Integer project_id){
-        userStoryService.extractUserStoriesForProject(project_id);
-        return ResponseEntity.ok(new ApiResponse("User Stories Generated!"));
-    }
+//
+//    @PostMapping("/generate-by-project/{project_id}")
+//    public ResponseEntity<?> generateUserStoriesForProject(@AuthenticationPrincipal @PathVariable Integer project_id){
+//        userStoryService.extractUserStoriesForProject(project_id);
+//        return ResponseEntity.ok(new ApiResponse("User Stories Generated!"));
+//    }
 }

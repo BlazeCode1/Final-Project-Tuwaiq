@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiException;
 import org.example.finalprojecttuwaiq.DTO.RequirementRequestDTO;
+import org.example.finalprojecttuwaiq.Model.BA;
 import org.example.finalprojecttuwaiq.Model.DraftRequirement;
 import org.example.finalprojecttuwaiq.Model.Project;
 import org.example.finalprojecttuwaiq.Model.Requirement;
+import org.example.finalprojecttuwaiq.Repository.BARepository;
 import org.example.finalprojecttuwaiq.Repository.DraftRequirementRepository;
 import org.example.finalprojecttuwaiq.Repository.ProjectRepository;
 import org.example.finalprojecttuwaiq.Repository.RequirementRepository;
@@ -22,6 +24,7 @@ public class RequirementService {
 
     private final RequirementRepository requirementRepository;
     private final ProjectRepository projectRepository;
+    private final BARepository baRepository;
     private final OpenAiChatModel ai;
     private final ObjectMapper objectMapper;
     private final RequirementMapper mapper;
@@ -35,10 +38,14 @@ public class RequirementService {
         return requirementRepository.findById(id).orElseThrow(() -> new ApiException("Requirement with id " + id + " not found"));
     }
 
-        public void addRequirement(RequirementRequestDTO requirementRequestDTO) {
+        public void addRequirement(Integer ba_id,RequirementRequestDTO requirementRequestDTO) {
         Project project = projectRepository.findById(requirementRequestDTO.getProjectId())
                 .orElseThrow(() -> new ApiException("Project with ID " + requirementRequestDTO.getProjectId() + " not found"));
-
+            BA ba = baRepository.findBAById(ba_id);
+            if (ba == null)
+                throw new ApiException("BA not found");
+            if (!project.getBas().contains(ba))
+                throw new ApiException("Not Authorized");
         Requirement requirement = new Requirement();
         requirement.setTitle(requirementRequestDTO.getTitle());
         requirement.setDescription(requirementRequestDTO.getDescription());
@@ -50,12 +57,17 @@ public class RequirementService {
         requirement.setProject(project);
         requirementRepository.save(requirement);
     }
-    public void extractRequirements(Integer projectId) {
+    public void extractRequirements(Integer ba_id,Integer projectId) {
         Project project = projectRepository.findProjectById(projectId);
 
         if (project == null)
             throw new ApiException("Project Not Found");
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA not found");
 
+        if (!project.getBas().contains(ba))
+            throw new ApiException("Not Authorized");
 
         String prompt = """
                 You are a Business Analyst AI assistant.
@@ -70,7 +82,6 @@ public class RequirementService {
                   "description": "...",
                   "type": "Business|Functional|NonFunctional|Regulatory|Constraint",
                   "priority": "Must|Should|Could|Wont",
-                  "status": "Draft|Analyzed|Validated|Approved|Deprecated",
                   "source": "...",
                   "rationale": "...",
                   "projectId": %d
@@ -88,8 +99,7 @@ public class RequirementService {
          draftRequirementRepository.save(draftRequirement);
     }
 
-    //TODO: Accept Draft And Map it to requirements By Id
-    public void acceptDraft(Integer draft_id){
+    public void acceptDraft(Integer ba_id,Integer draft_id){
         DraftRequirement draftRequirement = draftRequirementRepository.findDraftRequirementById(draft_id);
 
         if(draftRequirement == null)
@@ -97,6 +107,12 @@ public class RequirementService {
         Project projectMain = projectRepository.findProjectById(draftRequirement.getProject_id());
         if(projectMain == null)
             throw new ApiException("Project Not found");
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA not found");
+
+        if (!projectMain.getBas().contains(ba))
+            throw new ApiException("Not Authorized");
         try {
         List<RequirementRequestDTO> request = objectMapper.readValue(draftRequirement.getAiResponse(),new TypeReference<>() {}
         );
@@ -120,20 +136,31 @@ public class RequirementService {
 
 
 
-    public List<Requirement> getRequirementsByProjectId(Integer project_id) {
+    public List<Requirement> getRequirementsByProjectId(Integer ba_id,Integer project_id) {
 
         Project project = projectRepository.findProjectById(project_id);
         if(project == null)
             throw new ApiException("Project not found");
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA not found");
+
+        if (!project.getBas().contains(ba))
+            throw new ApiException("Not Authorized");
     return requirementRepository.getRequirementsByProject(project);
     }
 
 
-    public void updateRequirement(Integer id, RequirementRequestDTO requirementRequestDTO) {
+    public void updateRequirement(Integer ba_id,Integer id, RequirementRequestDTO requirementRequestDTO) {
         Requirement existingRequirement = requirementRepository.findById(id).orElseThrow(() -> new ApiException("Requirement with id " + id + " not found"));
         Project project = projectRepository.findById(requirementRequestDTO.getProjectId())
                 .orElseThrow(() -> new ApiException("Project with ID " + requirementRequestDTO.getProjectId() + " not found"));
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA not found");
 
+        if (!project.getBas().contains(ba))
+            throw new ApiException("Not Authorized");
         existingRequirement.setTitle(requirementRequestDTO.getTitle());
         existingRequirement.setDescription(requirementRequestDTO.getDescription());
         existingRequirement.setType(requirementRequestDTO.getType());
@@ -145,8 +172,15 @@ public class RequirementService {
         requirementRepository.save(existingRequirement);
     }
 
-    public void deleteRequirement(Integer id) {
+    public void deleteRequirement(Integer ba_id,Integer id) {
+
         Requirement requirement = requirementRepository.findById(id).orElseThrow(() -> new ApiException("Requirement with id " + id + " not found"));
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA not found");
+
+        if (!requirement.getProject().getBas().contains(ba))
+            throw new ApiException("Not Authorized");
         requirementRepository.delete(requirement);
     }
 }

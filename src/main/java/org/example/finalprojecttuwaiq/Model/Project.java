@@ -1,9 +1,6 @@
 package org.example.finalprojecttuwaiq.Model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -11,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -43,6 +39,8 @@ public class Project {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    private Integer owner;
 
     @ManyToMany(mappedBy = "projects")
     private Set<BA> bas;

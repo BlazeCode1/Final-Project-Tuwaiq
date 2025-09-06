@@ -45,6 +45,8 @@ public class ConfigSecurity {
 //
 //                //Stakeholder Routes
                .requestMatchers("/api/v1/stakeholder/register").permitAll()
+               .requestMatchers("api/v1/stakeholder/update").hasAuthority("STAKEHOLDER")
+               .requestMatchers("api/v1/stakeholder/delete").hasAuthority("STAKEHOLDER")
 //
 //
 //               //Approval ROUTES
@@ -56,19 +58,48 @@ public class ConfigSecurity {
 //               //Document ROUTES
                .requestMatchers("/api/v1/documents/generate/frd/{project_id}").hasAuthority("BA")
                .requestMatchers("/api/v1/documents/generate/brd/{project_id}").hasAuthority("BA")
-//               .requestMatchers("/api/v1/auth/register").hasAuthority("ADMIN")
-//               .requestMatchers("/api/v1/auth/get/users").hasAuthority("ADMIN")
+
                //Payment ROUTES
                .requestMatchers("/api/v1/payment/monthly").hasAuthority("BA")
                .requestMatchers("/api/v1/payment/yearly").hasAuthority("BA")
                .requestMatchers("/api/v1/payment/subscription/status").hasAuthority("BA")
                .requestMatchers("/api/v1/payment/subscription/cancel").hasAuthority("BA")
                .requestMatchers("/api/v1/payment/callback/**").permitAll()
+
                // Jira ROUTES
                .requestMatchers("/api/v1/jira/issue-from-userstory/{userStoryId}").hasAuthority("BA")
                .requestMatchers("/api/v1/jira/issue-from-project/{project_id}").hasAuthority("BA")
 
+                // Project ROUTES
+               .requestMatchers("/api/v1/projects/add").hasAuthority("BA")
+               .requestMatchers("/api/v1/projects/update/{id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/projects/delete/{id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/projects/{projectId}/market-benchmark").hasAuthority("BA")
+               .requestMatchers("/api/v1/projects/assign/stakeholder/{stakeholder_id}/{project_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/projects/assign/ba/{ba_id}/{project_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/projects/recommend-tools/{projectId}").hasAuthority("BA")
+
+               //Requirements ROUTES
+               .requestMatchers("/api/v1/requirement/add").hasAuthority("BA")
+               .requestMatchers("/api/v1/requirement/by-project/{project_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/requirement/generate/{project_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/requirement/draft/get/{draft_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/requirement/draft/accept/{draft_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/requirement/draft/reject/{draft_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/requirement/update/{id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/requirement/delete/{id}").hasAuthority("BA")
+
+               //UserStory ROUTES
+               .requestMatchers("/api/v1/user-stories/add").hasAuthority("BA")
+               .requestMatchers("/api/v1/user-stories/update/{id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/user-stories/delete/{id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/user-stories/generate/{requirement_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/user-stories/draft/requirement/{requirement_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/user-stories/draft/get/{draft_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/user-stories/draft/accept/{draft_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/user-stories/draft/reject/{draft_id}").hasAuthority("BA")
                //Login
+
                .requestMatchers("/api/v1/auth/login").permitAll()
                .anyRequest().authenticated()
                .and()
