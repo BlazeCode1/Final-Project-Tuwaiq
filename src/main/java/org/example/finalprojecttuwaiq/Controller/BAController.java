@@ -4,12 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiResponse;
 import org.example.finalprojecttuwaiq.DTO.BARequestDTO;
-import org.example.finalprojecttuwaiq.Model.BA;
 import org.example.finalprojecttuwaiq.Service.BAService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/ba")
@@ -28,10 +25,10 @@ public class BAController {
         return ResponseEntity.ok(baService.getBAById(id));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addBA(@Valid @RequestBody BARequestDTO baRequestDTO) {
-        baService.addBA(baRequestDTO);
-        return ResponseEntity.status(201).body(new ApiResponse("BA added successfully"));
+    @PostMapping("/register")
+    public ResponseEntity<?> registerBa(@Valid @RequestBody BARequestDTO baRequestDTO) {
+        baService.registerBa(baRequestDTO);
+        return ResponseEntity.status(201).body(new ApiResponse("BA Registered successfully"));
     }
 
     @PutMapping("/update/{id}")

@@ -20,8 +20,8 @@ public class MailService {
         mailMessage.setTo(stakeholder.getUser().getEmail());
         mailMessage.setSubject("Approval Request: " + document.getTitle());
 
-        String body = "Dear " + stakeholder.getUser().getName() + ",\n\n"
-                + requester.getUser().getName()+ " has requested your approval for the document: "
+        String body = "Dear " + stakeholder.getUser().getUsername() + ",\n\n"
+                + requester.getUser().getUsername()+ " has requested your approval for the document: "
                 + document.getTitle() + ".\n\n"
                 + "Please review and approve.\n\n"
                 + "Best regards,\n"
@@ -35,9 +35,9 @@ public class MailService {
         mailMessage.setTo(requester.getUser().getEmail());
         mailMessage.setSubject("Document Approved: " + document.getTitle());
         mailMessage.setText(
-                "Dear " + requester.getUser().getName() + ",\n\n" +
+                "Dear " + requester.getUser().getUsername() + ",\n\n" +
                         "Your document \"" + document.getTitle() + "\" has been approved by " +
-                        approver.getUser().getName() + ".\n\n" +
+                        approver.getUser().getUsername() + ".\n\n" +
                         "Best regards,\nDocument Management System"
         );
         mailSender.send(mailMessage);
@@ -48,9 +48,9 @@ public class MailService {
         mailMessage.setTo(requester.getUser().getEmail());
         mailMessage.setSubject("Document Rejected: " + document.getTitle());
         mailMessage.setText(
-                "Dear " + requester.getUser().getName() + ",\n\n" +
+                "Dear " + requester.getUser().getUsername() + ",\n\n" +
                         "Your document \"" + document.getTitle() + "\" has been rejected by " +
-                        approver.getUser().getName() + ".\n" +
+                        approver.getUser().getUsername() + ".\n" +
                         (reason != null && !reason.isBlank() ? ("Reason: " + reason + "\n\n") : "\n") +
                         "Best regards,\nDocument Management System"
         );

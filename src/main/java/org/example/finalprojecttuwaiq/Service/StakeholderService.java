@@ -8,6 +8,7 @@ import org.example.finalprojecttuwaiq.Model.Stakeholder;
 import org.example.finalprojecttuwaiq.Model.User;
 import org.example.finalprojecttuwaiq.Repository.StakeholderRepository;
 import org.example.finalprojecttuwaiq.Repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,12 +29,12 @@ public class StakeholderService {
         return stakeholderRepository.findById(id).orElseThrow(() -> new ApiException("Stakeholder with id " + id + " not found"));
     }
 
-    public void addStakeholder(StakeholderRequestDTO stakeholderRequestDTO) {
+    public void registerStakeholder(StakeholderRequestDTO stakeholderRequestDTO) {
         User user = new User();
-        user.setName(stakeholderRequestDTO.getName());
+        user.setUsername(stakeholderRequestDTO.getUsername());
         user.setEmail(stakeholderRequestDTO.getEmail());
         user.setPhone(stakeholderRequestDTO.getPhone());
-        user.setPasswordHash(stakeholderRequestDTO.getPasswordHash());
+        user.setPassword(new BCryptPasswordEncoder().encode(stakeholderRequestDTO.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
         user.setRole("STAKEHOLDER");
         Stakeholder stakeholder = new Stakeholder();
@@ -51,10 +52,10 @@ public class StakeholderService {
         if (user == null) {
             throw new ApiException("Associated user not found for stakeholder with id " + id);
         }
-        user.setName(stakeholderRequestDTO.getName());
+        user.setUsername(stakeholderRequestDTO.getUsername());
         user.setEmail(stakeholderRequestDTO.getEmail());
         user.setPhone(stakeholderRequestDTO.getPhone());
-        user.setPasswordHash(stakeholderRequestDTO.getPasswordHash());
+        user.setPassword(stakeholderRequestDTO.getPassword());
         userRepository.save(user);
 
         existingStakeholder.setOrganization(stakeholderRequestDTO.getOrganization());

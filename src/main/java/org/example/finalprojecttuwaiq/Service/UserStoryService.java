@@ -163,7 +163,6 @@ public class UserStoryService {
         }
     }
 
-    //TODO: Reject Draft And Delete it from DB By Id
     public void rejectDraft(Integer draft_id) {
         DraftUserStory draftUserStory = draftUserStoryRepository.findDraftUserStoryById(draft_id);
         if (draftUserStory == null)
@@ -181,7 +180,6 @@ public class UserStoryService {
         userStory.setSoThat(userStoryRequestDTO.getSoThat());
         userStory.setPriority(userStoryRequestDTO.getPriority());
         userStory.setAcceptanceCriteria(userStoryRequestDTO.getAcceptanceCriteria());
-        userStory.setStatus(userStoryRequestDTO.getStatus());
         userStory.setRequirement(requirement);
         userStoryRepository.save(userStory);
     }
@@ -196,7 +194,6 @@ public class UserStoryService {
         existingUserStory.setSoThat(userStoryRequestDTO.getSoThat());
         existingUserStory.setPriority(userStoryRequestDTO.getPriority());
         existingUserStory.setAcceptanceCriteria(userStoryRequestDTO.getAcceptanceCriteria());
-        existingUserStory.setStatus(userStoryRequestDTO.getStatus());
         existingUserStory.setRequirement(requirement);
         userStoryRepository.save(existingUserStory);
     }

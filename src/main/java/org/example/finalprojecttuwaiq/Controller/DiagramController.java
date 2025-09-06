@@ -37,12 +37,12 @@ public class DiagramController {
         diagramService.generateClassDiagram(project_id);
         return ResponseEntity.ok(new ApiResponse("Class diagram generated"));
     }
-    @PostMapping("/generate/class")
+    @PostMapping("/generate/sequence")
     public ResponseEntity<?> generateSequenceDiagram(Integer project_id){
         diagramService.generateSequenceDiagram(project_id);
         return ResponseEntity.ok(new ApiResponse("Class diagram generated"));
     }
-    @PostMapping("/generate/class")
+    @PostMapping("/generate/erd")
     public ResponseEntity<?> generateErdDiagram(Integer project_id){
         diagramService.generateErDiagram(project_id);
         return ResponseEntity.ok(new ApiResponse("Class diagram generated"));

@@ -17,7 +17,6 @@ public class UserStoryMapper {
         entity.setSoThat(dto.getSoThat());
         entity.setPriority(dto.getPriority());
         entity.setAcceptanceCriteria(dto.getAcceptanceCriteria());
-        entity.setStatus(dto.getStatus());
         entity.setRequirement(requirement);
 
         return entity;

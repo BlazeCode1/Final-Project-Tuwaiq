@@ -8,9 +8,9 @@ import org.example.finalprojecttuwaiq.Model.Project;
 import org.example.finalprojecttuwaiq.Model.User;
 import org.example.finalprojecttuwaiq.Repository.BARepository;
 import org.example.finalprojecttuwaiq.Repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,12 +29,13 @@ public class BAService {
         return baRepository.findById(id).orElseThrow(() -> new ApiException("BA with id " + id + " not found"));
     }
 
-    public void addBA(BARequestDTO baRequestDTO) {
+    public void registerBa(BARequestDTO baRequestDTO) {
         User user = new User();
         user.setName(baRequestDTO.getName());
+        user.setUsername(baRequestDTO.getUsername());
         user.setEmail(baRequestDTO.getEmail());
         user.setPhone(baRequestDTO.getPhone());
-        user.setPasswordHash(baRequestDTO.getPasswordHash());
+        user.setPassword(new BCryptPasswordEncoder().encode(baRequestDTO.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
         user.setRole("BA");
 
@@ -55,7 +56,7 @@ public class BAService {
         user.setName(baRequestDTO.getName());
         user.setEmail(baRequestDTO.getEmail());
         user.setPhone(baRequestDTO.getPhone());
-        user.setPasswordHash(baRequestDTO.getPasswordHash());
+        user.setPassword(new BCryptPasswordEncoder().encode(baRequestDTO.getPassword()));
         userRepository.save(user);
 
         existingBA.setDomainExpertise(baRequestDTO.getDomainExpertise());
