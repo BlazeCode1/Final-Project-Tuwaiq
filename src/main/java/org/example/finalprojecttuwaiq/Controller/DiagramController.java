@@ -26,10 +26,28 @@ public class DiagramController {
         return ResponseEntity.ok(diagramService.getDiagramById(id));
     }
 
-
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse> deleteDiagram(@PathVariable Integer id) {
         diagramService.deleteDiagram(id);
         return ResponseEntity.ok(new ApiResponse("Diagram deleted successfully"));
     }
+
+    @PostMapping("/generate/class")
+    public ResponseEntity<?> generateClassDiagram(Integer project_id){
+        diagramService.generateClassDiagram(project_id);
+        return ResponseEntity.ok(new ApiResponse("Class diagram generated"));
+    }
+    @PostMapping("/generate/class")
+    public ResponseEntity<?> generateSequenceDiagram(Integer project_id){
+        diagramService.generateSequenceDiagram(project_id);
+        return ResponseEntity.ok(new ApiResponse("Class diagram generated"));
+    }
+    @PostMapping("/generate/class")
+    public ResponseEntity<?> generateErdDiagram(Integer project_id){
+        diagramService.generateErDiagram(project_id);
+        return ResponseEntity.ok(new ApiResponse("Class diagram generated"));
+    }
+
+
+
 }
