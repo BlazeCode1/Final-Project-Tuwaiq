@@ -35,23 +35,21 @@ public class RequirementService {
         return requirementRepository.findById(id).orElseThrow(() -> new ApiException("Requirement with id " + id + " not found"));
     }
 
-    //    public void addRequirement(RequirementRequestDTO requirementRequestDTO) {
-//        Project project = projectRepository.findById(requirementRequestDTO.getProjectId())
-//                .orElseThrow(() -> new ApiException("Project with ID " + requirementRequestDTO.getProjectId() + " not found"));
-//
-//        Requirement requirement = new Requirement();
-//        requirement.setTitle(requirementRequestDTO.getTitle());
-//        requirement.setDescription(requirementRequestDTO.getDescription());
-//        requirement.setType(requirementRequestDTO.getType());
-//        requirement.setPriority(requirementRequestDTO.getPriority());
-//        requirement.setStatus(requirementRequestDTO.getStatus());
-//        requirement.setSource(requirementRequestDTO.getSource());
-//        requirement.setRationale(requirementRequestDTO.getRationale());
-//        // Generate traceId using current time in milliseconds
-//        requirement.setTraceId(String.valueOf(System.currentTimeMillis()));
-//        requirement.setProject(project);
-//        requirementRepository.save(requirement);
-//    }
+        public void addRequirement(RequirementRequestDTO requirementRequestDTO) {
+        Project project = projectRepository.findById(requirementRequestDTO.getProjectId())
+                .orElseThrow(() -> new ApiException("Project with ID " + requirementRequestDTO.getProjectId() + " not found"));
+
+        Requirement requirement = new Requirement();
+        requirement.setTitle(requirementRequestDTO.getTitle());
+        requirement.setDescription(requirementRequestDTO.getDescription());
+        requirement.setType(requirementRequestDTO.getType());
+        requirement.setPriority(requirementRequestDTO.getPriority());
+        requirement.setSource(requirementRequestDTO.getSource());
+        requirement.setRationale(requirementRequestDTO.getRationale());
+        // Generate traceId using current time in milliseconds
+        requirement.setProject(project);
+        requirementRepository.save(requirement);
+    }
     public void extractRequirements(Integer projectId) {
         Project project = projectRepository.findProjectById(projectId);
 
