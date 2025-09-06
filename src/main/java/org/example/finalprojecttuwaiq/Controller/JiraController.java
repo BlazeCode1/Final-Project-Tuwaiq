@@ -21,4 +21,9 @@ public class JiraController {
     public Map<String, Object> createFromProject(@PathVariable Integer projectId) {
         return jiraService.createIssuesForProject(projectId, "BAC");
     }
+
+    @PostMapping("/project/create/example")
+    public Map<String, Object> createNewJiraProject(){
+        return jiraService.createNewJiraProject();
+    }
 }

@@ -37,6 +37,10 @@ public class JiraService {
     @Value("${jira.api.token}")
     private String token;
 
+    // for testing, TODO replace later
+    @Value("${jira.lead.account.id}")
+    private String leadAccountId;
+
     private HttpHeaders jsonHeaders() {
         HttpHeaders h = new HttpHeaders();
         h.setBasicAuth(email, token);               // email + API token
@@ -118,6 +122,39 @@ public class JiraService {
         );
     }
 
+    // sample for now
+    public Map<String, Object> createNewJiraProject(){
+
+        Map<String, Object> payload = new LinkedHashMap<>();
+        // the following data are a sample from Atlassian themselves, not the map however
+        payload.put("key", "EX08"); // Ensure this key is unique and not already in use
+        payload.put("name", "Example");
+        payload.put("projectTypeKey", "business"); // "software", "service_desk", "business"
+        payload.put("projectTemplateKey", "com.atlassian.jira-core-project-templates:jira-core-simplified-process-control"); // Example for business, use appropriate for your type
+        payload.put("description", "Cloud migration initiative");
+        payload.put("leadAccountId", leadAccountId);
+
+        HttpEntity<Map<String, Object>> req = new HttpEntity<>(payload, jsonHeaders());
+        var res = rest.exchange(
+                base + "/rest/api/3/project",
+                HttpMethod.POST,
+                req,
+                new ParameterizedTypeReference<Map<String, Object>>() {
+                }
+        ).getBody();
+
+        String jiraKey = (String) res.get("key");
+        String self = (String) res.get("self");
+        Integer id = (Integer) res.get("id"); // TODO check this one for correct return type
+
+        return Map.of(
+                "status", "created",
+                "projectId", id,
+                "jiraKey", jiraKey,
+                "browse", base + "/browse/" + jiraKey,
+                "self", self
+        );
+    }
 
 }
 
