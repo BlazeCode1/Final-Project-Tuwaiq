@@ -62,5 +62,9 @@ public class JiraController {
         jiraService.transitionTo(key, "In Progress"); // غيّر الاسم لو وركفلو مختلف
     }
 
+    @PostMapping("/create-from-userstory/{userStoryId}")
+    public Map<String, Object> createFromUserStory(@PathVariable Integer userStoryId) {
+        return jiraService.createIssueFromUserStoryId(userStoryId, "BAC");
+    }
 
 }
