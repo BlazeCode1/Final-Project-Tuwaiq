@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -43,17 +44,17 @@ public class Project {
     private Integer owner;
 
     @ManyToMany(mappedBy = "projects")
-    private Set<BA> bas;
+    private Set<BA> bas = new HashSet<>();
 
     @ManyToMany(mappedBy = "projects")
-    private Set<Stakeholder> stakeholders;
+    private Set<Stakeholder> stakeholders = new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private Set<Requirement> requirements;
+    private Set<Requirement> requirements = new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private Set<Document> documents;
+    private Set<Document> documents = new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private Set<Diagram> diagrams;
+    private Set<Diagram> diagrams = new HashSet<>();
 }
