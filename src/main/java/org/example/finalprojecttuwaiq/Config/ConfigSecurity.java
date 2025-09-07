@@ -45,13 +45,13 @@ public class ConfigSecurity {
 //
 //                //Stakeholder Routes
                .requestMatchers("/api/v1/stakeholder/register").permitAll()
-               .requestMatchers("api/v1/stakeholder/update").hasAuthority("STAKEHOLDER")
+               .requestMatchers("/api/v1/stakeholder/update").hasAuthority("STAKEHOLDER")
                .requestMatchers("api/v1/stakeholder/delete").hasAuthority("STAKEHOLDER")
 //
 //
 //               //Approval ROUTES
                .requestMatchers("/api/v1/approvals/approve").hasAuthority("STAKEHOLDER")
-               .requestMatchers("api/v1/approvals/pending").hasAuthority("STAKEHOLDER")
+               .requestMatchers("/api/v1/approvals/pending").hasAuthority("STAKEHOLDER")
                .requestMatchers("/api/v1/approvals/reject").hasAuthority("STAKEHOLDER")
                .requestMatchers("/api/v1/approvals/send").hasAuthority("BA")
 //

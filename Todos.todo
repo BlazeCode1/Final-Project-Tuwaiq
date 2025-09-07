@@ -2,7 +2,7 @@
 TODO JsonIgnore in all models {FIX}
 TODO Add Security Layer, jwtService JwtAuthenticationFilter{Still}
 TODO register Endpoint for each role {Still}
-TODO @AuthenticationPrinciple to hasAuth endpoints
+TODO @AuthenticationPrinciple to hasAuth endpoints & Jira Controller
 # Diagrams
 TODO Generating diagrams using AI for mermaid {DONE}
 

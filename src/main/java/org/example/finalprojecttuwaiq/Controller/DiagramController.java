@@ -36,6 +36,7 @@ public class DiagramController {
     public ResponseEntity<List<Diagram>> getAllDiagrams() {
         return ResponseEntity.ok(diagramService.getAllDiagrams());
     }
+
     @GetMapping("/get/{id}")
     public ResponseEntity<Diagram> getDiagramById(@PathVariable Integer id) {
         return ResponseEntity.ok(diagramService.getDiagramById(id));
