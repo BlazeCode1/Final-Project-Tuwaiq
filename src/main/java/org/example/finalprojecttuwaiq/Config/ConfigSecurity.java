@@ -59,6 +59,9 @@ public class ConfigSecurity {
                .requestMatchers("/api/v1/documents/generate/frd/{project_id}").hasAuthority("BA")
                .requestMatchers("/api/v1/documents/generate/brd/{project_id}").hasAuthority("BA")
 
+//               //Document ROUTES
+               .requestMatchers("/api/v1/diagrams/generate/**").hasAuthority("BA")
+
                //Payment ROUTES
                .requestMatchers("/api/v1/payment/monthly").hasAuthority("BA")
                .requestMatchers("/api/v1/payment/yearly").hasAuthority("BA")
