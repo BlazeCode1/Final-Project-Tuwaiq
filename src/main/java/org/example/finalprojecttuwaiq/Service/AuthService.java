@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -21,6 +23,8 @@ public class AuthService {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
 
         User user = (User) authentication.getPrincipal();
+        user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
         return jwtService.generateToken(user);
     }
 }
