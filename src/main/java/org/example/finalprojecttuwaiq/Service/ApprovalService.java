@@ -57,8 +57,12 @@ public class ApprovalService {
 
         Stakeholder stakeholder = stakeholderRepository.findById(approvalRequestDTO.getStakeholderId())
                 .orElseThrow(() -> new ApiException("Stakeholder with ID " + approvalRequestDTO.getStakeholderId() + " not found"));
+
         Document document = documentRepository.findById(approvalRequestDTO.getDocumentId())
                 .orElseThrow(() -> new ApiException("Document with ID " + approvalRequestDTO.getDocumentId() + " not found"));
+        if (!document.getProject().getStakeholders().contains(stakeholder)){
+            throw new ApiException("Stakeholder Not In Project");
+        }
         if (!ba.getUser().getRole().equalsIgnoreCase("BA"))
             throw new ApiException("Unauthorized");
         Approval approval = new Approval();
@@ -78,7 +82,9 @@ public class ApprovalService {
 
         Stakeholder stakeholder = stakeholderRepository.findById(stakeholder_id)
                 .orElseThrow(()-> new ApiException("Approval with ID "+stakeholder_id+" not found"));
-
+        if (!approval.getDocument().getProject().getStakeholders().contains(stakeholder)){
+            throw new ApiException("Stakeholder Not In Project");
+        }
         if (!Objects.equals(approval.getStakeholder().getId(), stakeholder.getId())){
             throw new ApiException("This stakeholder is not authorized to approve this request.");
         }
@@ -111,7 +117,9 @@ public class ApprovalService {
         if (ba == null){
             throw new ApiException("Approval requester (BA) is missing or has no email.");
         }
-
+        if (!approval.getDocument().getProject().getStakeholders().contains(stakeholder)){
+            throw new ApiException("Stakeholder Not In Project");
+        }
         approval.setStatus("REJECTED");
         approval.setReviewedAt(LocalDateTime.now());
         approval.setBa(ba);
