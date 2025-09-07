@@ -1,5 +1,6 @@
 package org.example.finalprojecttuwaiq.Controller;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiResponse;
@@ -24,7 +25,7 @@ public class ApprovalController {
 
 
     @PostMapping("/send")
-    public ResponseEntity<?> sendApprovalRequest(@AuthenticationPrincipal User user, @RequestBody @Valid ApprovalRequestDTO approvalRequestDTO) {
+    public ResponseEntity<?> sendApprovalRequest(@AuthenticationPrincipal User user, @RequestBody @Valid ApprovalRequestDTO approvalRequestDTO) throws MessagingException {
         approvalService.sendApproval(user.getId(), approvalRequestDTO);
         return ResponseEntity.ok().body(new ApiResponse("Request Sent Successfully"));
     }
@@ -33,13 +34,13 @@ public class ApprovalController {
         return ResponseEntity.ok(approvalService.getPendingApprovalsByStakeholderId(user.getId()));
     }
     @PutMapping("/approve")
-    public ResponseEntity<?> acceptApproval(@AuthenticationPrincipal User user,@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) {
+    public ResponseEntity<?> acceptApproval(@AuthenticationPrincipal User user,@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) throws MessagingException {
         approvalService.acceptApproval(user.getId(),approvalResponseDTO);
         return ResponseEntity.ok().body(new ApiResponse("Document approved"));
     }
 
     @PutMapping("/reject")
-    public ResponseEntity<?> rejectApproval(@AuthenticationPrincipal User user,@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) {
+    public ResponseEntity<?> rejectApproval(@AuthenticationPrincipal User user,@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) throws MessagingException {
         approvalService.rejectApproval(user.getId(),approvalResponseDTO);
         return ResponseEntity.ok().body(new ApiResponse("Document rejected"));
     }
