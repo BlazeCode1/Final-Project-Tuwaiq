@@ -61,6 +61,18 @@ public class ProjectController {
         return ResponseEntity.ok(new ApiResponse("Assigned Business Analyst To Project"));
     }
 
+    @PutMapping("/exit/ba/{project_id}")
+    public ResponseEntity<?> exitProjectGroupForBA(@AuthenticationPrincipal User user,@PathVariable Integer project_id){
+        projectService.exitProjectGroupForBA(user.getId(), project_id);
+        return ResponseEntity.ok(new ApiResponse("you left the project successfully"));
+    }
+
+    @PutMapping("/exit/stakeholder/{project_id}")
+    public ResponseEntity<?> exitProjectGroupForStakeHolder(@AuthenticationPrincipal User user,@PathVariable Integer project_id){
+        projectService.exitProjectGroupForStakeHolder(user.getId(), project_id);
+        return ResponseEntity.ok(new ApiResponse("you left the project successfully"));
+    }
+
     @PostMapping("/recommend-tools/{projectId}")
     public ResponseEntity<?> recommendTools(@AuthenticationPrincipal User user,@PathVariable Integer projectId){
         return ResponseEntity.ok().body(projectService.recommendTools(user.getId(),projectId));

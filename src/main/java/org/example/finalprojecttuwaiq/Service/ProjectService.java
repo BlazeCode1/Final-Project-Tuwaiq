@@ -92,6 +92,44 @@ public class ProjectService {
         baRepository.save(ba);
     }
 
+    public void exitProjectGroupForBA(Integer ba_id, Integer project_id){
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA Not Found");
+        Project project = projectRepository.findProjectById(project_id);
+
+        if (project == null)
+            throw new ApiException("Project Not Found");
+
+        BA owner = baRepository.findBAById(project.getOwner());
+        if (!owner.equals(ba))
+            throw new ApiException("you can not exit your own project");
+
+        project.getBas().remove(ba);
+        ba.getProjects().remove(project);
+
+        projectRepository.save(project);
+        baRepository.save(ba);
+    }
+
+    public void exitProjectGroupForStakeHolder(Integer stakeholder_id, Integer project_id){
+        Stakeholder stakeholder = stakeholderRepository.findStakeholderById(stakeholder_id);
+        if (stakeholder == null)
+            throw new ApiException("stakeholder Not Found");
+
+        Project project = projectRepository.findProjectById(project_id);
+
+        if (project == null)
+            throw new ApiException("Project Not Found");
+
+
+        project.getStakeholders().remove(stakeholder);
+        stakeholder.getProjects().remove(project);
+
+        projectRepository.save(project);
+        stakeholderRepository.save(stakeholder);
+    }
+
     public void updateProject(Integer ownerId,Integer id, ProjectRequestDTO projectRequestDTO) {
         BA ba = baRepository.findBAById(ownerId);
         if (ba == null)
