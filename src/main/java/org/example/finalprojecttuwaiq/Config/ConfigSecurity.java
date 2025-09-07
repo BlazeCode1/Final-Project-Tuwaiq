@@ -78,6 +78,8 @@ public class ConfigSecurity {
                .requestMatchers("/api/v1/projects/assign/stakeholder/{stakeholder_id}/{project_id}").hasAuthority("BA")
                .requestMatchers("/api/v1/projects/assign/ba/{ba_id}/{project_id}").hasAuthority("BA")
                .requestMatchers("/api/v1/projects/recommend-tools/{projectId}").hasAuthority("BA")
+               .requestMatchers("/api/v1/projects/exit/ba/{project_id}").hasAuthority("BA")
+               .requestMatchers("/api/v1/projects/exit/stakeholder/{project_id}").hasAuthority("STAKEHOLDER")
 
                //Requirements ROUTES
                .requestMatchers("/api/v1/requirement/add").hasAuthority("BA")
