@@ -26,7 +26,6 @@ TODO Get Projects By Ba | Stakeholder {DONE}
 TODO do not assign the owner to the same project, he is already the owner
 
 #Abdullah
-TODO create service that returns the subscription status
 TODO Test Whatsapp API
 TODO Integrate SMS API
 TODO fix figma
