@@ -48,6 +48,10 @@ public class DocumentService {
         if (creator == null)
             throw new ApiException("BA Not Found");
 
+        if (!creator.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         Project project = projectRepository.findProjectById(project_id);
         if (project == null)
             throw new ApiException("Project Not found");
@@ -140,6 +144,10 @@ public class DocumentService {
         BA creator = baRepository.findBAById(ba_id);
         if (creator == null)
             throw new ApiException("BA Not Found");
+
+        if (!creator.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
 
         Project project = projectRepository.findProjectById(project_id);
         if (project == null)

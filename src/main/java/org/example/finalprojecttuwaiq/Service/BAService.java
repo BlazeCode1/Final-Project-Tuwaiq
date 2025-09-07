@@ -73,6 +73,11 @@ public class BAService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!ba.getUser().getRole().equalsIgnoreCase("BA"))
             throw new ApiException("Unauthorized");
         return baRepository.findProjectsByBaID(ba_id);

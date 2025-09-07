@@ -36,6 +36,10 @@ public class DraftRequirementService {
         if (ba == null)
             throw new ApiException("BA not found");
 
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!project.getBas().contains(ba))
             throw new ApiException("Not Authorized");
         return draftRequirement;
@@ -52,6 +56,10 @@ public class DraftRequirementService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
 
         if (!project.getBas().contains(ba))
             throw new ApiException("Not Authorized");

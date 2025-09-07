@@ -40,6 +40,11 @@ public class UserStoryService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!requirement.getProject().getBas().contains(ba))
             throw new ApiException("Not Authorized");
 
@@ -51,6 +56,11 @@ public class UserStoryService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!requirement.getProject().getBas().contains(ba))
             throw new ApiException("Not Authorized");
 
@@ -71,6 +81,11 @@ public class UserStoryService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!requirement.getProject().getBas().contains(ba))
             throw new ApiException("Not Authorized");
         existingUserStory.setAsA(userStoryRequestDTO.getAsA());
@@ -87,6 +102,11 @@ public class UserStoryService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!userStory.getRequirement().getProject().getBas().contains(ba))
             throw new ApiException("Not authorized");
 
@@ -101,6 +121,11 @@ public class UserStoryService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!requirement.getProject().getBas().contains(ba))
             throw new ApiException("Not Authorized");
         try {
@@ -195,6 +220,11 @@ public class UserStoryService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!requirement.getProject().getBas().contains(ba))
             throw new ApiException("Not Authorized");
 
@@ -214,6 +244,11 @@ public class UserStoryService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!requirementById.getProject().getBas().contains(ba))
             throw new ApiException("Not Authorized");
 
@@ -250,6 +285,11 @@ public class UserStoryService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!requirement.getProject().getBas().contains(ba))
             throw new ApiException("Not Authorized");
 

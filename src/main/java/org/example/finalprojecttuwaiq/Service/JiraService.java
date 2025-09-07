@@ -37,7 +37,6 @@ public class JiraService {
     @Value("${jira.api.token}")
     private String token;
 
-    // for testing, TODO replace later
     @Value("${jira.lead.account.id}")
     private String leadAccountId;
 
