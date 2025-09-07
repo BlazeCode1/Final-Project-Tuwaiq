@@ -2,9 +2,12 @@ package org.example.finalprojecttuwaiq.Service;
 
 import lombok.RequiredArgsConstructor;
 
+import org.example.finalprojecttuwaiq.Api.ApiException;
+import org.example.finalprojecttuwaiq.Model.BA;
 import org.example.finalprojecttuwaiq.Model.Project;
 import org.example.finalprojecttuwaiq.Model.Requirement;
 import org.example.finalprojecttuwaiq.Model.UserStory;
+import org.example.finalprojecttuwaiq.Repository.BARepository;
 import org.example.finalprojecttuwaiq.Repository.ProjectRepository;
 import org.example.finalprojecttuwaiq.Repository.UserStoryRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +32,7 @@ public class JiraService {
     private final RestTemplate rest;
     private final UserStoryRepository userStoryRepository;
     private final ProjectRepository projectRepository;
+    private final BARepository baRepository;
 
     @Value("${jira.base.url}")
     private String base;
@@ -47,13 +51,20 @@ public class JiraService {
         return h;
     }
 
-    public Map<String, Object> createIssueFromUserStoryId(Integer userStoryId, String jiraProjectKey) {
-        UserStory us = userStoryRepository.findById(userStoryId)
+    public Map<String, Object> createIssueFromUserStoryId(Integer ba_id,Integer userStoryId, String jiraProjectKey) {
+        UserStory userStory = userStoryRepository.findById(userStoryId)
                 .orElseThrow(() -> new RuntimeException("UserStory " + userStoryId + " not found"));
 
-        String asA = us.getAsA() == null ? "" : us.getAsA().trim();
-        String iWant = us.getIWant() == null ? "" : us.getIWant().trim();
-        String soThat = us.getSoThat() == null ? "" : us.getSoThat().trim();
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA not found");
+
+        if (!userStory.getRequirement().getProject().getBas().contains(ba))
+            throw new ApiException("Not Authorized");
+
+        String asA = userStory.getAsA() == null ? "" : userStory.getAsA().trim();
+        String iWant = userStory.getIWant() == null ? "" : userStory.getIWant().trim();
+        String soThat = userStory.getSoThat() == null ? "" : userStory.getSoThat().trim();
 
         String summary = ("As a " + asA + ", I want " + iWant +
                 (soThat.isBlank() ? "" : " so that " + soThat)).trim();
@@ -76,7 +87,7 @@ public class JiraService {
         String jiraKey = (String) res.get("key");
         String self = (String) res.get("self");
 
-        us.getRequirement().getProject().setStatus("InDelivery");
+        userStory.getRequirement().getProject().setStatus("InDelivery");
 
         return Map.of(
                 "status", "created",
@@ -87,9 +98,16 @@ public class JiraService {
         );
     }
 
-    public Map<String, Object> createIssuesForProject(Integer projectId, String jiraProjectKey) {
+    public Map<String, Object> createIssuesForProject(Integer ba_id,Integer projectId, String jiraProjectKey) {
         Project project = projectRepository.findProjectById(projectId);
         if (project == null) throw new RuntimeException("Project " + projectId + " not found");
+
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA not found");
+
+        if (!project.getBas().contains(ba))
+            throw new ApiException("Not Authorized");
 
         // collect all US from all requirements
         List<UserStory> stories = new ArrayList<>();
@@ -100,9 +118,9 @@ public class JiraService {
         }
 
         List<Map<String, Object>> items = new ArrayList<>();
-        for (UserStory us : stories) {
+        for (UserStory userStory : stories) {
             // reuse the simple single-US creation method
-            Map<String, Object> result = createIssueFromUserStoryId(us.getId(), jiraProjectKey);
+            Map<String, Object> result = createIssueFromUserStoryId(ba_id,userStory.getId(), jiraProjectKey);
             items.add(result);
         }
 
