@@ -77,6 +77,7 @@ public class ConfigSecurity {
 
                 // Project ROUTES
                .requestMatchers("/api/v1/projects/add").hasAuthority("BA")
+               .requestMatchers("/api/v1/projects/get/{id}").hasAuthority("BA")
                .requestMatchers("/api/v1/projects/update/{id}").hasAuthority("BA")
                .requestMatchers("/api/v1/projects/delete/{id}").hasAuthority("BA")
                .requestMatchers("/api/v1/projects/{projectId}/market-benchmark").hasAuthority("BA")

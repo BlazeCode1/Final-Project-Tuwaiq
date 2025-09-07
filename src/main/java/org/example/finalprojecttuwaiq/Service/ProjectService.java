@@ -32,7 +32,19 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public Project getProjectById(Integer id) {
+    public Project getProjectById(Integer ba_id,Integer id) {
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("Ba not found");
+
+        Project project = projectRepository.findProjectById(id);
+        if (project  == null)
+            throw new ApiException("Project not found");
+
+        if (!project.getBas().contains(ba))
+            throw new ApiException("Unauthorized");
+
+
         return projectRepository.findById(id).orElseThrow(() -> new ApiException("Project with id " + id + " not found"));
     }
 

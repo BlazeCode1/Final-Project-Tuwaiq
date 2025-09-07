@@ -1,30 +1,29 @@
 # All
-TODO JsonIgnore in all models {FIX}
-TODO Add Security Layer, jwtService JwtAuthenticationFilter{Still}
-TODO register Endpoint for each role {Still}
-TODO @AuthenticationPrinciple to hasAuth endpoints & Jira Controller
+TODO JsonIgnore in all models {DONE}
+TODO Add Security Layer, jwtService JwtAuthenticationFilter{DONE}
+TODO register Endpoint for each role {DONE}
+TODO @AuthenticationPrinciple to hasAuth endpoints & Jira Controller {DONE}
 # Diagrams
 TODO Generating diagrams using AI for mermaid {DONE}
 
 #Documents
-TODO add authentication
+TODO add authentication {DONE | Abdullah}
 TODO saving documents in the DB {DONE}
 TODO document fix String type {DONE}
 TODO Create S3 Buckets to save each pdf file with a link {DONE}
 TODO FRD, BRD prompts fix {DONE}
 TODO Approval for documents {DONE |ALI}
-TODO Document View From Bucket Authorization | S3 {Still}
+TODO Document View From Bucket Authorization | S3 {Done}
 
 #UserStory
-TODO Generate User Stories from all requirements and a service that accepts all the draft user stories
+TODO Generate User Stories from all requirements and a service that accepts all the draft user stories{STILL}
 
 #Project
 TODO  Project, approval status {DONE}
-TODO check for subscription status in each and every end-point related to BA workflow
+TODO check for subscription status in each and every end-point related to BA workflow{DONE}
 TODO Make BA Invites Stakeholders and Bas into the project {DONE}
-TODO generating push project info to Jira {Still}
+TODO generating push project info to Jira {DONE}
 TODO Get Projects By Ba | Stakeholder {DONE}
-TODO do not assign the owner to the same project, he is already the owner
 
 #Abdullah
 TODO Test Whatsapp API

@@ -24,8 +24,8 @@ public class ProjectController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<?> getProjectById(@PathVariable Integer id) {
-        return ResponseEntity.ok(projectService.getProjectById(id));
+    public ResponseEntity<?> getProjectById(@AuthenticationPrincipal User user, @PathVariable Integer id) {
+        return ResponseEntity.ok(projectService.getProjectById(user.getId(),id));
     }
 
     @PutMapping("/update/{id}")
