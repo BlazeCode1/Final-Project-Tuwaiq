@@ -40,6 +40,11 @@ public class ProjectService {
         BA businessAnalyst = baRepository.findBAById(ba_id);
         if (businessAnalyst == null)
             throw new ApiException("Business Analyst Not Found");
+
+        if (!businessAnalyst.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!businessAnalyst.getUser().getRole().equalsIgnoreCase("BA"))
             throw new ApiException("Must Be Business Analyst to add A project");
         Project project = new Project();
@@ -66,6 +71,15 @@ public class ProjectService {
         if (project == null)
             throw new ApiException("Project Not Found");
         BA owner = baRepository.findBAById(project.getOwner());
+
+        if (owner == null){
+            throw new ApiException("Owner does not exist");
+        }
+
+        if (!owner.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!owner.equals(ba))
             throw new ApiException("Unauthorized");
         project.getStakeholders().add(stakeholder);
@@ -85,6 +99,10 @@ public class ProjectService {
         if (requester == null)
             throw new ApiException("BA not found");
 
+        if (!requester.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         BA owner = baRepository.findBAById(project.getOwner());
         if (!owner.equals(requester))
             throw new ApiException("Unauthorized");
@@ -99,6 +117,10 @@ public class ProjectService {
 
         if (ba == null)
             throw new ApiException("BA Not Found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
 
         Project project = projectRepository.findProjectById(project_id);
 

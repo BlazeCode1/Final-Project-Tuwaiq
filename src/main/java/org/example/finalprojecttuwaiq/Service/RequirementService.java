@@ -44,6 +44,11 @@ public class RequirementService {
             BA ba = baRepository.findBAById(ba_id);
             if (ba == null)
                 throw new ApiException("BA not found");
+
+            if (!ba.getIsSubscribed()){
+                throw new ApiException("Unauthorized, you are not subscribed");
+            }
+
             if (!project.getBas().contains(ba))
                 throw new ApiException("Not Authorized");
         Requirement requirement = new Requirement();
@@ -65,6 +70,10 @@ public class RequirementService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
 
         if (!project.getBas().contains(ba))
             throw new ApiException("Not Authorized");
@@ -111,6 +120,10 @@ public class RequirementService {
         if (ba == null)
             throw new ApiException("BA not found");
 
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!projectMain.getBas().contains(ba))
             throw new ApiException("Not Authorized");
         try {
@@ -145,6 +158,10 @@ public class RequirementService {
         if (ba == null)
             throw new ApiException("BA not found");
 
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         if (!project.getBas().contains(ba))
             throw new ApiException("Not Authorized");
     return requirementRepository.getRequirementsByProject(project);
@@ -158,6 +175,10 @@ public class RequirementService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
 
         if (!project.getBas().contains(ba))
             throw new ApiException("Not Authorized");
@@ -178,6 +199,10 @@ public class RequirementService {
         BA ba = baRepository.findBAById(ba_id);
         if (ba == null)
             throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
 
         if (!requirement.getProject().getBas().contains(ba))
             throw new ApiException("Not Authorized");

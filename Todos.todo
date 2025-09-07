@@ -7,6 +7,7 @@ TODO @AuthenticationPrinciple to hasAuth endpoints
 TODO Generating diagrams using AI for mermaid {DONE}
 
 #Documents
+TODO add authentication
 TODO saving documents in the DB {DONE}
 TODO document fix String type {DONE}
 TODO Create S3 Buckets to save each pdf file with a link {DONE}

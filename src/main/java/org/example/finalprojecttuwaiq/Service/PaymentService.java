@@ -301,15 +301,5 @@ public class PaymentService {
 
         baRepository.save(ba);
     }
-
-    public boolean validateSubscription(Integer baID){
-        BA ba = baRepository.findBAById(baID);
-
-        if (ba == null) {
-            throw new ApiException("Error, the business analyst does not exist");
-        }
-
-        return ba.getIsSubscribed(); // this will return false if not subscribed by default
-    }
 }
 

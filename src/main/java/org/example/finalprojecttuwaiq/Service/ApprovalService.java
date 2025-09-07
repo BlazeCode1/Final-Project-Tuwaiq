@@ -50,6 +50,11 @@ public class ApprovalService {
 
         BA ba = baRepository.findById(baId)
                 .orElseThrow(() -> new ApiException("Business Analyst with ID " + baId + " not found"));
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
         Stakeholder stakeholder = stakeholderRepository.findById(approvalRequestDTO.getStakeholderId())
                 .orElseThrow(() -> new ApiException("Stakeholder with ID " + approvalRequestDTO.getStakeholderId() + " not found"));
         Document document = documentRepository.findById(approvalRequestDTO.getDocumentId())
