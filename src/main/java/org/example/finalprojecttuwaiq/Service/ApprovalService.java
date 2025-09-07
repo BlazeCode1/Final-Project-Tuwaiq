@@ -59,7 +59,6 @@ public class ApprovalService {
         Approval approval = new Approval();
         approval.setStatus("PENDING");
         approval.setBa(ba);
-        approval.setComments(approvalRequestDTO.getComments());
         approval.setReviewedAt(LocalDateTime.now());
         approval.setStakeholder(stakeholder);
         approval.setDocument(document);
@@ -123,8 +122,8 @@ public class ApprovalService {
         Document document = documentRepository.findById(approvalRequestDTO.getDocumentId())
                 .orElseThrow(() -> new ApiException("Document with ID " + approvalRequestDTO.getDocumentId() + " not found"));
 
-        existingApproval.setStatus(approvalRequestDTO.getStatus());
-        existingApproval.setComments(approvalRequestDTO.getComments());
+//        existingApproval.setStatus(approvalRequestDTO.getStatus());
+//        existingApproval.setComments(approvalRequestDTO.getComments());
         existingApproval.setReviewedAt(LocalDateTime.now());
         existingApproval.setStakeholder(stakeholder);
         existingApproval.setDocument(document);

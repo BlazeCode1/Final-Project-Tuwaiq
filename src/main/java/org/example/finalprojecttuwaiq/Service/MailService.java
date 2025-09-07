@@ -30,7 +30,7 @@ public class MailService {
         mailSender.send(mailMessage);
     }
 
-    public void sendApprovedEmail(BA requester, Document document, Stakeholder approver,String reason) {
+    public void sendApprovedEmail(BA requester, Document document, Stakeholder approver,String Comment) {
         mailMessage.setFrom("alimuaffag@gmail.com");
         mailMessage.setTo(requester.getUser().getEmail());
         mailMessage.setSubject("Document Approved: " + document.getTitle());
@@ -38,13 +38,13 @@ public class MailService {
                 "Dear " + requester.getUser().getUsername() + ",\n\n" +
                         "Your document \"" + document.getTitle() + "\" has been approved by " +
                         approver.getUser().getUsername() + ".\n" +
-                        (reason != null && !reason.isBlank() ? ("Reason: " + reason + "\n\n") : "\n") +
+                        (Comment != null && !Comment.isBlank() ? ("Comment: " + Comment + "\n\n") : "\n") +
                         "Best regards,\nDocument Management System"
         );
         mailSender.send(mailMessage);
     }
 
-    public void sendRejectedEmail(BA requester, Document document, Stakeholder approver, String reason) {
+    public void sendRejectedEmail(BA requester, Document document, Stakeholder approver, String Comment) {
         mailMessage.setFrom("no-reply@yourdomain.com");
         mailMessage.setTo(requester.getUser().getEmail());
         mailMessage.setSubject("Document Rejected: " + document.getTitle());
@@ -52,7 +52,7 @@ public class MailService {
                 "Dear " + requester.getUser().getUsername() + ",\n\n" +
                         "Your document \"" + document.getTitle() + "\" has been rejected by " +
                         approver.getUser().getUsername() + ".\n" +
-                        (reason != null && !reason.isBlank() ? ("Reason: " + reason + "\n\n") : "\n") +
+                        (Comment != null && !Comment.isBlank() ? ("Comment: " + Comment + "\n\n") : "\n") +
                         "Best regards,\nDocument Management System"
         );
         mailSender.send(mailMessage);

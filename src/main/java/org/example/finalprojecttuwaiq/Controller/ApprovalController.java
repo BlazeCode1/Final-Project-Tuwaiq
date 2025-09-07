@@ -32,13 +32,13 @@ public class ApprovalController {
     public ResponseEntity<?> getPendingApprovalsByStakeholder(@AuthenticationPrincipal User user){
         return ResponseEntity.ok(approvalService.getPendingApprovalsByStakeholderId(user.getId()));
     }
-    @PostMapping("/approve")
+    @PutMapping("/approve")
     public ResponseEntity<?> acceptApproval(@AuthenticationPrincipal User user,@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) {
         approvalService.acceptApproval(user.getId(),approvalResponseDTO);
         return ResponseEntity.ok().body(new ApiResponse("Document approved"));
     }
 
-    @PostMapping("/reject")
+    @PutMapping("/reject")
     public ResponseEntity<?> rejectApproval(@AuthenticationPrincipal User user,@RequestBody @Valid ApprovalResponseDTO approvalResponseDTO) {
         approvalService.rejectApproval(user.getId(),approvalResponseDTO);
         return ResponseEntity.ok().body(new ApiResponse("Document rejected"));
