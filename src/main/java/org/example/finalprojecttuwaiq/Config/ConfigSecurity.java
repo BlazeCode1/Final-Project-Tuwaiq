@@ -41,6 +41,8 @@ public class ConfigSecurity {
 //               //Business Analyst ROUTES
                .requestMatchers("/api/v1/ba/register").permitAll()
                .requestMatchers("/api/v1/ba/projects").hasAuthority("BA")
+               .requestMatchers("/api/v1/ba/update").hasAuthority("BA")
+               .requestMatchers("/api/v1/ba/delete").hasAuthority("BA")
 //
 //
 //                //Stakeholder Routes

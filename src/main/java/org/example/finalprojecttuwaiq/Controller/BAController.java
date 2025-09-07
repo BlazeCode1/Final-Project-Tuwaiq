@@ -38,16 +38,14 @@ public class BAController {
     }
 
 
-    //TODO: add authentication then in config
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateBA(@PathVariable Integer id, @Valid @RequestBody BARequestDTO baRequestDTO) {
-        baService.updateBA(id, baRequestDTO);
+    @PutMapping("/update")
+    public ResponseEntity<?> updateBA(@AuthenticationPrincipal User user, @Valid @RequestBody BARequestDTO baRequestDTO) {
+        baService.updateBA(user.getId(), baRequestDTO);
         return ResponseEntity.ok(new ApiResponse("BA updated successfully"));
     }
-    //TODO: add authentication
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteBA(@PathVariable Integer id) {
-        baService.deleteBA(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteBA(@AuthenticationPrincipal User user) {
+        baService.deleteBA(user.getId());
         return ResponseEntity.ok(new ApiResponse("BA deleted successfully"));
     }
 
