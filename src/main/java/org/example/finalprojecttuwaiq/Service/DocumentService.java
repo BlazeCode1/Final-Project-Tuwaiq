@@ -131,7 +131,7 @@ public class DocumentService {
         document.setType("BRD");
         document.setProject(project);
         document.setCreatedAt(LocalDateTime.now());
-        document.setContentURI(bucket + fileName);
+        document.setContentURI(s3.generatePresignedUrl(fileName));
 
         project.setStatus("Documentation");
 
@@ -243,8 +243,7 @@ public class DocumentService {
         document.setType("FRD");
         document.setProject(project);
         document.setCreatedAt(LocalDateTime.now());
-        document.setContentURI(bucket + fileName);
-
+        document.setContentURI(s3.generatePresignedUrl(fileName));
         project.setStatus("Documentation");
 
         projectRepository.save(project);
