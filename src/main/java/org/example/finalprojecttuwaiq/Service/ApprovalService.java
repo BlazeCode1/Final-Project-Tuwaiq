@@ -1,5 +1,6 @@
 package org.example.finalprojecttuwaiq.Service;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiException;
 import org.example.finalprojecttuwaiq.DTO.ApprovalRequestDTO;
@@ -46,7 +47,7 @@ public class ApprovalService {
 
 
 
-    public void sendApproval(Integer baId, ApprovalRequestDTO approvalRequestDTO) {
+    public void sendApproval(Integer baId, ApprovalRequestDTO approvalRequestDTO) throws MessagingException {
 
         BA ba = baRepository.findById(baId)
                 .orElseThrow(() -> new ApiException("Business Analyst with ID " + baId + " not found"));
@@ -75,7 +76,7 @@ public class ApprovalService {
         mailService.sendApprovalRequestEmail(stakeholder,document,ba);
     }
 
-    public void acceptApproval(Integer stakeholder_id,ApprovalResponseDTO approvalResponseDTO){
+    public void acceptApproval(Integer stakeholder_id,ApprovalResponseDTO approvalResponseDTO) throws MessagingException {
         Approval approval = approvalRepository.findById(approvalResponseDTO.getApprovalId())
                 .orElseThrow(() -> new ApiException("Approval with ID "+approvalResponseDTO.getApprovalId()+" not found"));
 
@@ -102,7 +103,7 @@ public class ApprovalService {
         mailService.sendApprovedEmail(ba,approval.getDocument(),stakeholder, approval.getComments());
     }
 
-    public void rejectApproval(Integer stakeholder_id,ApprovalResponseDTO approvalResponseDTO){
+    public void rejectApproval(Integer stakeholder_id,ApprovalResponseDTO approvalResponseDTO) throws MessagingException {
         Approval approval = approvalRepository.findById(approvalResponseDTO.getApprovalId())
                 .orElseThrow(() -> new ApiException("Approval with ID "+approvalResponseDTO.getApprovalId()+" not found"));
 
