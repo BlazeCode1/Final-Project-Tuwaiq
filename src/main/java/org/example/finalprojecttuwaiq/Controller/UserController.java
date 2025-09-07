@@ -19,29 +19,29 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/get")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
+    public ResponseEntity<?> getUserById(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         userService.registerAdmin(userRequestDTO);
         return ResponseEntity.status(201).body(new ApiResponse("User added successfully"));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse> updateUser(@PathVariable Integer id, @Valid @RequestBody UserRequestDTO userRequestDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable Integer id, @Valid @RequestBody UserRequestDTO userRequestDTO) {
         userService.updateUser(id, userRequestDTO);
         return ResponseEntity.ok(new ApiResponse("User updated successfully"));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return ResponseEntity.ok(new ApiResponse("User deleted successfully"));
     }

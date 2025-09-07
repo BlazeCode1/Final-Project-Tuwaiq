@@ -100,9 +100,15 @@ public class ConfigSecurity {
                .requestMatchers("/api/v1/user-stories/draft/get/{draft_id}").hasAuthority("BA")
                .requestMatchers("/api/v1/user-stories/draft/accept/{draft_id}").hasAuthority("BA")
                .requestMatchers("/api/v1/user-stories/draft/reject/{draft_id}").hasAuthority("BA")
-               //Login
 
+               //Login
                .requestMatchers("/api/v1/auth/login").permitAll()
+
+               //Admin ROUTES
+               .requestMatchers("/api/v1/users/**").hasAuthority("ADMIN")
+               .requestMatchers("/api/v1/approvals/get").hasAuthority("ADMIN")
+               .requestMatchers("/api/v1/approvals/get/{id}").hasAuthority("ADMIN")
+               .requestMatchers("/api/v1/projects/get").hasAuthority("ADMIN")
                .anyRequest().authenticated()
                .and()
                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
