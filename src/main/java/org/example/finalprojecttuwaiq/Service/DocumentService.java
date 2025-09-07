@@ -251,4 +251,100 @@ public class DocumentService {
 
     }
 
+    public void generateFeasibilityStudy(Integer ba_id,Integer project_id) throws IOException {
+        BA creator = baRepository.findBAById(ba_id);
+        if (creator == null)
+            throw new ApiException("BA Not Found");
+
+        if (!creator.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
+        Project project = projectRepository.findProjectById(project_id);
+        if (project == null)
+            throw new ApiException("Project Not found");
+
+        if (!project.getBas().contains(creator))
+            throw new ApiException("Not Authorized"); // user is not part of the project group
+
+        String fileName = "Feasibility-" + project.getName() + ".pdf";
+
+        StringBuilder prompt = new StringBuilder();
+        prompt.append("You are a Project Analyst. Generate a professional Feasibility Analysis Document (FAD)  ");
+        prompt.append("for the following project. Use clear structure with headings, bullet points, numbering, and tables where appropriate.\n\n");
+
+        prompt.append("## Project Information\n");
+        prompt.append("Project Name: ").append(project.getName()).append("\n");
+        prompt.append("Project Description: ").append(project.getDescription()).append("\n");
+        prompt.append("Status: ").append(project.getStatus()).append("\n\n");
+
+        prompt.append("## Stakeholders\n");
+        if (project.getStakeholders() != null && !project.getStakeholders().isEmpty()) {
+            for (Stakeholder sh : project.getStakeholders()) {
+                prompt.append("- ").append(sh.getUser().getName())
+                        .append(" (").append(sh.getUser().getRole()).append(")\n");
+            }
+        }
+        prompt.append("\n");
+
+        prompt.append("## Requirements and User Stories\n");
+        int reqIndex = 1;
+        for (Requirement req : project.getRequirements()) {
+            prompt.append(reqIndex++).append(". Requirement: ").append(req.getTitle()).append("\n");
+            prompt.append("   - Description: ").append(req.getDescription()).append("\n");
+            prompt.append("   - Priority: ").append(req.getPriority()).append("\n");
+
+            if (req.getUserStories() != null && !req.getUserStories().isEmpty()) {
+                prompt.append("   - User Stories:\n");
+                for (UserStory us : req.getUserStories()) {
+                    prompt.append("     * US").append(us.getId()).append(": ")
+                            .append(us).append("\n");
+                }
+            }
+            prompt.append("\n");
+        }
+
+        prompt.append("Format the output as a FAD with the following sections: ");
+        prompt.append("Executive Summary, Project Description, Stakeholders, Technical Feasibility, Operational Feasibility, Economic Feasibility, Schedule Feasibility, Risks, Success Rate, Recommendations.\n");
+        prompt.append("When presenting tabular data (Stakeholders, Risks, Recommendations), generate proper HTML <table> elements with <thead>, <tr>, <th>, <td> tags.\n");
+        prompt.append("If project data does not provide enough information for a section, output 'Not provided in project data' instead of inventing details.\n");
+        String fullHtml = """
+                <html>
+                <head>
+                  <meta charset="UTF-8"/>
+                  <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.5; }
+                    h1, h2, h3 { color: #2c3e50; }
+                    h1 { border-bottom: 2px solid #333; padding-bottom: 5px; }
+                    ul { margin-left: 20px; }
+                    table { border-collapse: collapse; margin-top: 10px; }
+                    th, td { border: 1px solid #333; padding: 6px 10px; text-align: left; }
+                    th { background-color: #f4f4f4; }
+                    .section { margin-top: 20px; }
+                  </style>
+                </head>
+                <body>
+                %s
+                </body>
+                </html>
+                """.formatted(ai.call(prompt.toString()));
+
+
+        //OUTPUT FILE
+        String filepath = pdf.generatePdf(fileName, fullHtml);
+        s3.uploadFile(fileName, filepath);
+        Document document = new Document();
+
+        document.setTitle(fileName);
+        document.setType("Feasibility");
+        document.setProject(project);
+        document.setCreatedAt(LocalDateTime.now());
+        document.setContentURI(s3.generatePresignedUrl(fileName));
+
+        project.setStatus("Analysis");
+
+        projectRepository.save(project);
+        documentRepository.save(document);
+    }
+
 }

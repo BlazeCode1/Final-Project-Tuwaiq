@@ -32,6 +32,12 @@ public class DocumentController {
         return ResponseEntity.ok(new ApiResponse("Generated FRD Successfully"));
     }
 
+    @PostMapping("/generate/feasibility/{project_id}")
+    public ResponseEntity<?> generateFeasibilityStudy(@AuthenticationPrincipal User user, @PathVariable Integer project_id) throws IOException {
+        documentService.generateFeasibilityStudy(user.getId(),project_id);
+        return ResponseEntity.ok(new ApiResponse("Generated feasibility study Successfully"));
+    }
+
 
     @GetMapping("/get")
     public ResponseEntity<?> getAllDocuments() {
