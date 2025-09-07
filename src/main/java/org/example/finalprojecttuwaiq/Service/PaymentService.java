@@ -261,7 +261,7 @@ public class PaymentService {
         SubscriptionDTO subscriptionStatus = new SubscriptionDTO();
 
         // check and invalidate subscription if it has ended
-        if(ba.getSubscriptionEndDate().isBefore(LocalDate.now())) {
+        if(ba.getSubscriptionEndDate() != null && ba.getSubscriptionEndDate().isBefore(LocalDate.now())) {
             // the subscription has ended
             ba.setIsSubscribed(false);
             baRepository.save(ba); // plus +, keep the date for user reference
@@ -270,6 +270,8 @@ public class PaymentService {
 
         if (ba.getIsSubscribed()){
             subscriptionStatus.setStatus("Subscription is valid");
+        } else if (ba.getSubscriptionEndDate() == null){
+            subscriptionStatus.setStatus("You are not subscribed yet");
         } else { // it will be false if the user canceled it, even with a valid date (end-date > today)
             // and that is to be expected (please do not change this logic).
             // when in doubt, the user shall contact customer service for help
