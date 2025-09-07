@@ -2,8 +2,10 @@ package org.example.finalprojecttuwaiq.Service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiException;
+import org.example.finalprojecttuwaiq.Model.BA;
 import org.example.finalprojecttuwaiq.Model.Diagram;
 import org.example.finalprojecttuwaiq.Model.Project;
+import org.example.finalprojecttuwaiq.Repository.BARepository;
 import org.example.finalprojecttuwaiq.Repository.DiagramRepository;
 import org.example.finalprojecttuwaiq.Repository.ProjectRepository;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -17,6 +19,7 @@ public class DiagramService {
 
     private final DiagramRepository diagramRepository;
     private final ProjectRepository projectRepository;
+    private final BARepository baRepository;
     private final OpenAiChatModel ai;
     public List<Diagram> getAllDiagrams() {
         return diagramRepository.findAll();
@@ -32,9 +35,20 @@ public class DiagramService {
         diagramRepository.delete(diagram);
     }
 
-    public void generateClassDiagram(Integer projectId) {
+    public void generateClassDiagram(Integer ba_id, Integer projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ApiException("Project with id " + projectId + " not found"));
+
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
+        if (!project.getBas().contains(ba))
+            throw new ApiException("Not Authorized");
 
         try {
 
@@ -79,9 +93,20 @@ public class DiagramService {
         }
     }
 
-    public void generateSequenceDiagram(Integer projectId) {
+    public void generateSequenceDiagram(Integer ba_id, Integer projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ApiException("Project with id " + projectId + " not found"));
+
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
+        if (!project.getBas().contains(ba))
+            throw new ApiException("Not Authorized");
 
         try {
             // minimal source text: prefer description; fallback to name
@@ -122,11 +147,21 @@ public class DiagramService {
         }
     }
 
-    public void generateErDiagram(Integer projectId) {
+    public void generateErDiagram(Integer ba_id, Integer projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ApiException("Project with id " + projectId + " not found"));
-        if (project == null)
-            throw new ApiException("Project Not Found");
+
+        BA ba = baRepository.findBAById(ba_id);
+        if (ba == null)
+            throw new ApiException("BA not found");
+
+        if (!ba.getIsSubscribed()){
+            throw new ApiException("Unauthorized, you are not subscribed");
+        }
+
+        if (!project.getBas().contains(ba))
+            throw new ApiException("Not Authorized");
+
 
         try {
             String desc = project.getDescription();
