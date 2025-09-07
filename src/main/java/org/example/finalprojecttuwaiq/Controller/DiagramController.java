@@ -3,8 +3,10 @@ package org.example.finalprojecttuwaiq.Controller;
 import lombok.RequiredArgsConstructor;
 import org.example.finalprojecttuwaiq.Api.ApiResponse;
 import org.example.finalprojecttuwaiq.Model.Diagram;
+import org.example.finalprojecttuwaiq.Model.User;
 import org.example.finalprojecttuwaiq.Service.DiagramService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,19 +18,19 @@ public class DiagramController {
 
     private final DiagramService diagramService;
 
-    @PostMapping("/generate/class")
-    public ResponseEntity<?> generateClassDiagram(Integer project_id){
-        diagramService.generateClassDiagram(project_id);
+    @PostMapping("/generate/class/{project_id}")
+    public ResponseEntity<?> generateClassDiagram(@AuthenticationPrincipal User user, @PathVariable Integer project_id){
+        diagramService.generateClassDiagram(user.getId(), project_id);
         return ResponseEntity.ok(new ApiResponse("Class diagram generated"));
     }
-    @PostMapping("/generate/sequence")
-    public ResponseEntity<?> generateSequenceDiagram(Integer project_id){
-        diagramService.generateSequenceDiagram(project_id);
+    @PostMapping("/generate/sequence/{project_id}")
+    public ResponseEntity<?> generateSequenceDiagram(@AuthenticationPrincipal User user, @PathVariable Integer project_id){
+        diagramService.generateSequenceDiagram(user.getId(), project_id);
         return ResponseEntity.ok(new ApiResponse("Class diagram generated"));
     }
-    @PostMapping("/generate/erd")
-    public ResponseEntity<?> generateErdDiagram(Integer project_id){
-        diagramService.generateErDiagram(project_id);
+    @PostMapping("/generate/erd/{project_id}")
+    public ResponseEntity<?> generateErdDiagram(@AuthenticationPrincipal User user, @PathVariable Integer project_id){
+        diagramService.generateErDiagram(user.getId(), project_id);
         return ResponseEntity.ok(new ApiResponse("Class diagram generated"));
     }
 
