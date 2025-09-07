@@ -29,8 +29,9 @@ TODO do not assign the owner to the same project, he is already the owner
 TODO Test Whatsapp API
 TODO Integrate SMS API
 TODO fix figma
-TODO create exit project for business analysts and stake holders
 TODO create end point to reassign the owner of the project
-TODO Add whatsapp notification send to added or removed sh and bas
+TODO Add whatsapp notification send to added or removed sh and bas from the project group
 TODO add more subscription types end points
 TODO figma subscription green lower it
+
+TODO add logs using the logs additional topics
