@@ -315,10 +315,12 @@ mvn test
 
 ---
 ## - Class Diagram
-- 
+- <img width="2638" height="3840" alt="BA Copilot - Class Diagram" src="https://github.com/user-attachments/assets/5d18b850-be4e-479d-99a2-585aa22cc45c" />
+
 
 ## - Use Case Diagram
--
+- <img width="1064" height="3840" alt="BA Copilot - Use Case Diagram" src="https://github.com/user-attachments/assets/e899624d-0ffa-42fd-a4d7-ab15d71b4ce9" />
+
 ---
 
 ## 👤 Credits
