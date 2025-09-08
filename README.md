@@ -31,3 +31,4 @@ Figma:
 13. Manage subscription page's confirmation message
 14. More AI actions list page
 15. Project help button page
+

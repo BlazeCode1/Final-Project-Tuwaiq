@@ -115,6 +115,11 @@ public class ConfigSecurity {
                .requestMatchers("/api/v1/approvals/get").hasAuthority("ADMIN")
                .requestMatchers("/api/v1/approvals/get/{id}").hasAuthority("ADMIN")
                .requestMatchers("/api/v1/projects/get").hasAuthority("ADMIN")
+               .requestMatchers("/api/v1/ba/get").hasAuthority("ADMIN")
+               .requestMatchers("/api/v1/stakeholder/get").hasAuthority("ADMIN")
+               .requestMatchers("/api/v1/diagrams/get").hasAuthority("ADMIN")
+               .requestMatchers("/api/v1/user-stories/get").hasAuthority("ADMIN")
+               .requestMatchers("/api/v1/requirement/get").hasAuthority("ADMIN")
                .anyRequest().authenticated()
                .and()
                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

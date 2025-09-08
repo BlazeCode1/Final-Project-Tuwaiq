@@ -26,6 +26,16 @@ public class BAController {
         return ResponseEntity.ok(baService.findProjectsByBaId(user.getId()));
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<?> updateBA(@AuthenticationPrincipal User user, @Valid @RequestBody BARequestDTO baRequestDTO) {
+        baService.updateBA(user.getId(), baRequestDTO);
+        return ResponseEntity.ok(new ApiResponse("BA updated successfully"));
+    }
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteBA(@AuthenticationPrincipal User user) {
+        baService.deleteBA(user.getId());
+        return ResponseEntity.ok(new ApiResponse("BA deleted successfully"));
+    }
 
     @GetMapping("/get")
     public ResponseEntity<?> getAllBAs() {
@@ -38,15 +48,5 @@ public class BAController {
     }
 
 
-    @PutMapping("/update")
-    public ResponseEntity<?> updateBA(@AuthenticationPrincipal User user, @Valid @RequestBody BARequestDTO baRequestDTO) {
-        baService.updateBA(user.getId(), baRequestDTO);
-        return ResponseEntity.ok(new ApiResponse("BA updated successfully"));
-    }
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteBA(@AuthenticationPrincipal User user) {
-        baService.deleteBA(user.getId());
-        return ResponseEntity.ok(new ApiResponse("BA deleted successfully"));
-    }
 
 }
