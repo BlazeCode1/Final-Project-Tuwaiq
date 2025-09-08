@@ -341,7 +341,7 @@ public class DocumentService {
         document.setCreatedAt(LocalDateTime.now());
         document.setContentURI(s3.generatePresignedUrl(fileName));
 
-        project.setStatus("Analysis");
+        project.setStatus("Documentation");
 
         projectRepository.save(project);
         documentRepository.save(document);
