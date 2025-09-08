@@ -1,14 +1,14 @@
 # Abdullah:
 end-points:
-1 Subscribe monthly callback
-2 Subscribe yearly callback
-3 Get subscription status
-4 Cancel subscription 
-5 Jira project: create new project
-6 Exit project group for non-owner business analysts 
-7 Exit project group for stakeholder
-8 Reassign project owner by owner
-9 Generate feasibility study document with AI
+1. Subscribe monthly callback
+2. Subscribe yearly callback
+3. Get subscription status
+4. Cancel subscription 
+5. Jira project: create new project
+6. Exit project group for non-owner business analysts 
+7. Exit project group for stakeholder
+8. Reassign project owner by owner
+9. Generate feasibility study document with AI
 
 Services:
 Whatsapp send message
@@ -28,6 +28,6 @@ Figma:
 10. Features page 
 11. Empty projects list page
 12. Manage subscription page
-12. Manage subscription page's confirmation message
-13. More AI actions list page
-14. Project help button page
+13. Manage subscription page's confirmation message
+14. More AI actions list page
+15. Project help button page
