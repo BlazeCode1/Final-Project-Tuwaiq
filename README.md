@@ -29,7 +29,7 @@
 1. Create a project and add members.
 2. Paste notes → AI suggests **draft requirements** → review and accept/reject.
 3. Generate **user stories** from accepted requirements.
-4. Produce **BRD/FRD PDFs** and **AI-generated diagrams** (sequence/ER).
+4. Produce **BRD/FRD PDFs** and **AI-generated diagrams** (sequence/ER/Class).
 5. Request **approvals**; decisions are logged and emailed.
 6. **Sync to Jira** and **share securely** via presigned links.
 7. (Optional) Manage **subscriptions and payments**.
@@ -315,11 +315,12 @@ mvn test
 
 ---
 ## - Class Diagram
-- <img width="2638" height="3840" alt="BA Copilot - Class Diagram" src="https://github.com/user-attachments/assets/5d18b850-be4e-479d-99a2-585aa22cc45c" />
+- <img width="800" alt="BA Copilot - Class Diagram" src="https://github.com/user-attachments/assets/5d18b850-be4e-479d-99a2-585aa22cc45c" />
 
 
 ## - Use Case Diagram
-- <img width="1064" height="3840" alt="BA Copilot - Use Case Diagram" src="https://github.com/user-attachments/assets/e899624d-0ffa-42fd-a4d7-ab15d71b4ce9" />
+- <img width="800" alt="BA Copilot - Use Case Diagram" src="https://github.com/user-attachments/assets/e899624d-0ffa-42fd-a4d7-ab15d71b4ce9" />
+
 
 ---
 
