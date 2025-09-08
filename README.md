@@ -211,7 +211,7 @@ mvn test
 | 23 | POST | `/api/v1/documents/generate/frd/{project_id}` | Ali      |
 | 24 | POST | `/api/v1/documents/generate/feasibility/{project_id}` | Abdullah |
 | 25 | GET | `/api/v1/documents/get` | Abdullah |
-| 26 | GET | `/api/v1/documents/get/{id}` | Abullah  |
+| 26 | GET | `/api/v1/documents/get/{id}` | Abdullah  |
 | 27 | DELETE | `/api/v1/documents/delete/{id}` | Abdullah |
 
 ### JiraController
@@ -326,5 +326,5 @@ mvn test
 
 ## 👤 Credits
 
-Built by **Ali Abumansour**, **Faisal Almansour**, and **Abdullah AlWaal**.
+Built by **Ali Abumansour**, **Faisal Almansour**, and **Abdullah Alwael**.
 
