@@ -51,7 +51,7 @@
 
 ## 🧰 Tech Stack
 | Area                        | Stack                                                                 |
-| --------------------------- | --------------------------------------------------------------------- |
+|-----------------------------| --------------------------------------------------------------------- |
 | **Core Framework**          | Spring Boot                                                           |
 | **Backend**                 | Spring MVC (REST); Spring Data JPA; Hibernate; Spring Security; MySQL |
 | **Security**                | JSON Web Tokens (JWT)                                                 |
@@ -61,7 +61,7 @@
 | **APIs & HTTP**             | Unirest (HTTP client)                                                 |
 | **Developer Tools**         | Lombok; Jackson; JSON.org; Maven                                      |
 | **Testing**                 | JUnit 5; Mockito; AssertJ                                             |
-
+| Deployment                  | AWS (EC2, RDS, S3, IAM for deployment & hosting)
 ---
 
 ## ⚙️ Configuration
