@@ -39,7 +39,7 @@ public class PaymentService {
             throw new ApiException("Error, the current subscription is still active (not expired)");
         }
 
-        String callbackUrl = "http://localhost:8080/api/v1/payment/callback/yearly/" + baID;
+        String callbackUrl = "http://ba-copilot.eu-central-1.elasticbeanstalk.com/api/v1/payment/callback/yearly/" + baID;
 
 
         //create the body
@@ -84,7 +84,7 @@ public class PaymentService {
             throw new ApiException("Error, the current subscription is still active (not expired)");
         }
 
-        String callbackUrl = "http://localhost:8080/api/v1/payment/callback/monthly/" + baID;
+        String callbackUrl = "http://ba-copilot.eu-central-1.elasticbeanstalk.com/api/v1/payment/callback/monthly/" + baID;
 
 
         //create the body

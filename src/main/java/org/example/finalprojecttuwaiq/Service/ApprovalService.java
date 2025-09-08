@@ -71,9 +71,10 @@ public class ApprovalService {
         approval.setBa(ba);
         approval.setReviewedAt(LocalDateTime.now());
         approval.setStakeholder(stakeholder);
-        approval.getDocument().getProject().setStatus("Validation");
         approval.setDocument(document);
+        document.getProject().setStatus("Validation");
         approvalRepository.save(approval);
+        documentRepository.save(document);
         mailService.sendApprovalRequestEmail(stakeholder,document,ba);
     }
 

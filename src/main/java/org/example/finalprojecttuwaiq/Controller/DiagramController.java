@@ -34,6 +34,7 @@ public class DiagramController {
         return ResponseEntity.ok(new ApiResponse("Class diagram generated"));
     }
 
+
     @GetMapping("/get")
     public ResponseEntity<List<Diagram>> getAllDiagrams() {
         return ResponseEntity.ok(diagramService.getAllDiagrams());
