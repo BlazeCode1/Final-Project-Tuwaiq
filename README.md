@@ -11,9 +11,9 @@ end-points:
 9. Generate feasibility study document with AI
 
 Services:
-Whatsapp send message
-Security validation for all services that require a valid subscription
-Reasearched jira api documentations
+1. Whatsapp send message
+2. Security validation for all services that require a valid subscription
+3. Reasearched jira api documentations
 
 Figma:
 1. Home page 
