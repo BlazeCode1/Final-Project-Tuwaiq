@@ -307,7 +307,7 @@ public class DocumentService {
         prompt.append("Format the output as a FAD with the following sections: ");
         prompt.append("Executive Summary, Project Description, Stakeholders, Technical Feasibility, Operational Feasibility, Economic Feasibility, Schedule Feasibility, Risks, Success Rate, Recommendations.\n");
         prompt.append("When presenting tabular data (Stakeholders, Risks, Recommendations), generate proper HTML <table> elements with <thead>, <tr>, <th>, <td> tags.\n");
-        prompt.append("If project data does not provide enough information for a section, output 'Not provided in project data' instead of inventing details.\n");
+        prompt.append("When calculating any amounts that require a currency, use Saudi Riyal (SAR) as the currency.\n");
         String fullHtml = """
                 <html>
                 <head>
