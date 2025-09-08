@@ -27,8 +27,6 @@ public class UserStory {
 
     private String acceptanceCriteria;
 
-    private String status;
-
     @NotNull(message = "Requirement cannot be null")
     @ManyToOne
     @JsonIgnore

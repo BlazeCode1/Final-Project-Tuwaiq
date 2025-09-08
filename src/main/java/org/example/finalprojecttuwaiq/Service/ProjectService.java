@@ -261,17 +261,17 @@ public class ProjectService {
                       "similarity": 0-100,
                       "reasoning": "...",
                       "key_features": ["..."],
-                      "overlaps": ["..."], 
-                      "gaps": ["..."], 
-                      "price_tier": "LOW|MID|HIGH|null", 
-                      "sources": ["https://...","https://..."] 
-                    } 
-                  ], 
-                  "summary": { 
-                    "gaps_union": ["..."], 
-                    "differentiators_union": ["..."], 
-                    "action_items": ["..."] 
-                  } 
+                      "overlaps": ["..."],
+                      "gaps": ["..."],
+                      "price_tier": "LOW|MID|HIGH|null",
+                      "sources": ["https://...","https://..."]
+                    }
+                  ],
+                  "summary": {
+                    "gaps_union": ["..."],
+                    "differentiators_union": ["..."],
+                    "action_items": ["..."]
+                  }
                 }
                 
                 PROJECT:
