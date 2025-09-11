@@ -305,8 +305,11 @@ mvn test
 
 ---
 ##  - Figma:
+### Presentation:
 - https://www.figma.com/proto/Dhp3puaU3VGk5kQSQBtjrI/Java-Web-Final-Project?node-id=7-528
-
+### Videos:
+- https://drive.google.com/drive/folders/1IOXWR1Iqidn1mwDzoBMxLcWmF7VROv0C?usp=sharing
+  
 ## - Postman Documentation:
 - https://documenter.getpostman.com/view/32615945/2sB3HnJKaz
 
